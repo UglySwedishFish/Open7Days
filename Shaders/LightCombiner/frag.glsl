@@ -108,10 +108,9 @@ vec2 ScreenSpaceTracing(vec3 ViewPos, vec3 Normal) {
 			}
 
 
-			//if(abs(Depth - RayPos.z) < StepSizeBinary * 8.0) {
 				
 				return ScreenPos.xy; 
-			//}
+			
 			
 		}
 
@@ -171,7 +170,7 @@ void main() {
 
 
 
-			RefractedLighting = mix(RefractedLighting * vec3(0.0, 0.35, 0.5 ) * 2.0, Specular, FresnelWater(Incident, RawNormalSample.xyz)); 
+			RefractedLighting = mix(RefractedLighting * mix(vec3(0.0, 0.35, 0.5 ),vec3(0.0,0.5,0.35),clamp(abs(40.0-WorldPosition.y),0.0,2.0)*0.5)  * 2.0, Specular, FresnelWater(Incident, RawNormalSample.xyz)); 
 
 			Lighting = mix(BackGroundLighting,RefractedLighting,clamp(abs(40.0-WorldPosition.y), 0.0, 1.0)); 
 			

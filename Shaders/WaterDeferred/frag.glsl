@@ -27,7 +27,7 @@ void main() {
 
 	vec2 ActualTexCoord = ((TexCoord*2.-1.)+CameraPosition.xz*0.01) * 100.; 
 
-	vec3 NormalSample  = SampleInterpolatied(NormalMap, vec3(ActualTexCoord,mod(Time*12.0, 119.))).xyz * vec3(2.0,1.0,2.0) - vec3(1.0,0.0,1.0); 
+	vec3 NormalSample  = SampleInterpolatied(NormalMap, vec3(ActualTexCoord,mod(Time*36.0, 119.))).xyz * vec3(2.0,1.0,2.0) - vec3(1.0,0.0,1.0); 
 	NormalSample.y = 1.0; 
 	NormalSample.xz *= 0.15; 
 	OutNormal = normalize(mix(NormalSample, vec3(0.0,1.0,0.0),0.5)); 

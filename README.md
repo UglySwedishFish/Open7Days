@@ -1,2 +1,1 @@
-# Open7Days
-# Open7Days
+![image](https://github.com/UglySwedishFish/Open7Days/blob/master/Images/Open7Days.png?raw=true)

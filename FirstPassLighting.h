@@ -1,8 +1,8 @@
 #pragma once
 
-#include <IndirectDiffuse.h>
-#include <CubeMapRenderer.h>
-#include <WaterRenderer.h> 
+#include "IndirectDiffuse.h"
+#include "CubeMapRenderer.h"
+#include "WaterRenderer.h"
 
 namespace Open7Days {
 	namespace Rendering {

@@ -1,8 +1,8 @@
 #pragma once
 
-#include <Shadows.h>
-#include <DeferredRenderer.h>
-#include <Voxelizer.h>
+#include "Shadows.h"
+#include "DeferredRenderer.h"
+#include "Voxelizer.h"
 
 namespace Open7Days {
 	namespace Rendering {

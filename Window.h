@@ -1,7 +1,7 @@
 #pragma once
 
-#include <Dependencies/DependenciesRendering.h> 
-#include <Dependencies/DependenciesMath.h> 
+#include "Dependencies/DependenciesRendering.h"
+#include "Dependencies/DependenciesMath.h"
 
 
 class Window {

@@ -1,4 +1,4 @@
-#include "FrameBuffer.h"
+#include "Framebuffer.h"
 #include <iostream>
 
 
@@ -62,8 +62,6 @@ Open7Days::Rendering::FrameBufferObject::FrameBufferObject(glm::ivec2 Resolution
 	glBindTexture(GL_TEXTURE_2D, ColorBuffer);
 
 	glTexImage2D(GL_TEXTURE_2D, 0, Format, Resolution.x, Resolution.y, 0, GetCorresponding(Format), Format == GL_RGBA32UI ? GL_UNSIGNED_INT : GL_FLOAT, NULL);
-
-	std::cout << "Frame buffer error: " << glGetError() << '\n'; 
 
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, generatemip ? GL_LINEAR_MIPMAP_LINEAR : GL_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
@@ -403,8 +401,6 @@ Open7Days::Rendering::CubeMultiPassFrameBufferObject::CubeMultiPassFrameBufferOb
 			glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, 0, Formats[j], Resolution.x, Resolution.y, 0, GetCorresponding(Formats[j]), GL_FLOAT, NULL);
 
 			//std::cout << GetFormatText(Formats[j]) << ' ' << GetFormatText(GetCorresponding(Formats[j])) << '\n';
-
-			std::cout << glGetError() << '\n'; 
 		}
 		glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0 + j, GL_TEXTURE_2D, Texture[j], 0); //attach it to the frame buffer
 

@@ -16,7 +16,7 @@ namespace Open7Days {
 
 			IndirectDiffuseShader = Shader("Shaders/IndirectDiffuse");
 			IndirectDiffuseSpatialShader = Shader("Shaders/IndirectDiffuseSpatial");
-			IndirectDiffusePacker = Shader("SHaders/IndirectDiffusePacker"); 
+			IndirectDiffusePacker = Shader("Shaders/IndirectDiffusePacker"); 
 
 			IndirectDiffuseShader.Bind(); 
 

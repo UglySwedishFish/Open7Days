@@ -82,7 +82,7 @@ namespace Open7Days {
 			for (unsigned int i = 0; i < aiMesh->mNumVertices; i++) {
 				const aiVector3D* VertexPos = &(aiMesh->mVertices[i]);
 				const aiVector3D* VertexNormal = &(aiMesh->mNormals[i]);
-				const aiVector3D* VertexTextureCoordinate = aiMesh->HasTextureCoords(0) ? &(aiMesh->mTextureCoords[0][i]) : &aiVector3D(0);
+				const aiVector3D* VertexTextureCoordinate = aiMesh->HasTextureCoords(0) ? &(aiMesh->mTextureCoords[0][i]) : nullptr;
 
 				//if (!aiMesh->HasTangentsAndBitangents())
 				//	std::cout << "Warning: model does not have proper tangents!\n"; 
@@ -93,7 +93,10 @@ namespace Open7Days {
 				mesh.Normals.push_back(glm::vec3(VertexNormal->x, VertexNormal->y, VertexNormal->z));
 
 
-				mesh.TexCoords.push_back(Vector3f(VertexTextureCoordinate->x, VertexTextureCoordinate->y, float(aiMesh->mMaterialIndex) + 0.1));
+				if(VertexTextureCoordinate)
+				{
+					mesh.TexCoords.push_back(Vector3f(VertexTextureCoordinate->x, VertexTextureCoordinate->y, float(aiMesh->mMaterialIndex) + 0.1));
+				}
 				mesh.Materials.push_back(aiMesh->mMaterialIndex);
 			}
 

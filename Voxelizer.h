@@ -1,6 +1,6 @@
 #pragma once
 
-#include <Shadows.h>
+#include "Shadows.h"
 
 //todo: maybe a setting? :S
 #define VOXEL_VOLUME_RESOLUTION 64 
@@ -40,7 +40,7 @@ namespace Open7Days {
 			}
 
 			inline void Clear(Vector4u ClearColor) {
-				unsigned char CCF[] = { ClearColor.r,ClearColor.g,ClearColor.b,ClearColor.a };
+// 				unsigned char CCF[] = { ClearColor.r,ClearColor.g,ClearColor.b,ClearColor.a };
 				glBindTexture(GL_TEXTURE_3D, ID);
 				glClearTexImage(ID, 0, GL_RGBA, GL_FLOAT, 0);
 				glBindTexture(GL_TEXTURE_3D, 0);

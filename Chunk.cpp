@@ -1,7 +1,6 @@
 #include "Chunk.h"
-#include <noise.h>
+#include "noise.h"
 #include <iostream>
-#include <thread>
 
 double FindNoise1(int n, int seed) {
 	n += seed;

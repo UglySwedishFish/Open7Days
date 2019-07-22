@@ -2,11 +2,11 @@
 #include <filesystem>
 #include <iostream>
 #include <fstream>
-#include <Dependencies/DependenciesMath.h>
-#include <Dependencies/DependenciesRendering.h>
+#include "Dependencies/DependenciesMath.h"
+#include "Dependencies/DependenciesRendering.h"
 
 //if youre using an actually good IDE/compiler/are from the future, feel free to change this line to using std::filesystem
-using namespace std::experimental::filesystem::v1;
+using namespace std::filesystem;
 
 
 namespace Open7Days {
@@ -117,21 +117,21 @@ namespace Open7Days {
 						std::string Syntax = Extract(Line, 5, Line.size()); 
 
 						if (Syntax == "shovel")
-							TemporaryMaterial.Type = Shovel;
+							TemporaryMaterial.type = Shovel;
 						else if (Syntax == "axe")
-							TemporaryMaterial.Type = Axe;
+							TemporaryMaterial.type = Axe;
 						else
-							TemporaryMaterial.Type = Pickaxe; 
+							TemporaryMaterial.type = Pickaxe; 
 					}
 					else if (AtStart(Line, "icontype")) {
 						std::string Syntax = Extract(Line, 9, Line.size());
 
 						if (Syntax == "custom")
-							TemporaryMaterial.IconType = Custom;
+							TemporaryMaterial.iconType = Custom;
 						else if (Syntax == "item")
-							TemporaryMaterial.IconType = Item;
+							TemporaryMaterial.iconType = Item;
 						else
-							TemporaryMaterial.IconType = Block;
+							TemporaryMaterial.iconType = Block;
 					}
 					
 

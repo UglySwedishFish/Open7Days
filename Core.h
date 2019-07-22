@@ -1,6 +1,6 @@
 #pragma once
-#include <Dependencies\DependenciesMath.h> 
-#include <Window.h> 
+#include "Dependencies/DependenciesMath.h" 
+#include "Window.h"
 constexpr double PI = 3.14159265;
 #define Open7Days_DEBUG
 

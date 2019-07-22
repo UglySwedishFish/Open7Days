@@ -1,6 +1,6 @@
 #pragma once
 
-#include <FirstPassLighting.h>
+#include "FirstPassLighting.h"
 
 namespace Open7Days {
 	namespace Rendering {

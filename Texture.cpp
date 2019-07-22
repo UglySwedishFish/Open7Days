@@ -1,6 +1,6 @@
 #include "Texture.h"
-#include <Dependencies/DependenciesRendering.h>
-#include <Framebuffer.h>
+#include "Dependencies/DependenciesRendering.h"
+#include "Framebuffer.h"
 
 namespace Open7Days {
 	namespace Rendering {

@@ -11,6 +11,7 @@
 #include <Camera.h>
 #include <Shader.h>
 #include <Materials.h>
+#include <memory>
 
 #define CHUNKSIZE 16
 #define CHUNKHEIGHT 256
@@ -37,14 +38,13 @@ namespace Open7Days {
 			std::vector<Vector4f> Vertices, Normals;
 			Matrix4f Model; 
 
-			float* BlockWeights;
-			unsigned char* BlockMaterials; 
-
+			std::vector<unsigned char> BlockMaterials;
+			std::vector<float> BlockWeights; 
 
 			GLuint VAO, VBOs[3];
 
 			Chunk(std::int64_t X = 0, std::int64_t Y = 0) :
-				X(X), Y(Y),BlockWeights(new float[(CHUNKSIZE+1)*(CHUNKHEIGHT+1)*(CHUNKSIZE+1)]), BlockMaterials(new unsigned char[(CHUNKSIZE + 1) * (CHUNKHEIGHT + 1) * (CHUNKSIZE + 1)]), Vertices{}, Normals{}, VAO(0), VBOs{ 0,0,0 } {
+				X(X), Y(Y),BlockWeights(std::vector<float>((CHUNKSIZE+1)*(CHUNKHEIGHT+1)*(CHUNKSIZE+1))), BlockMaterials(std::vector<unsigned char>((CHUNKSIZE + 1) * (CHUNKHEIGHT + 1) * (CHUNKSIZE + 1))), Vertices{}, Normals{}, VAO(0), VBOs{ 0,0,0 } {
 				Model = Core::ModelMatrix(Vector3f(-X * CHUNKSIZE, 0.0, -Y * CHUNKSIZE), Vector3f(0.)); 
 			}
 

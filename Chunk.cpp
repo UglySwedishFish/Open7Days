@@ -252,8 +252,8 @@ namespace Open7Days {
 			//IDEA! brute force normal smoothing 
 
 			//layout: 0-p1, 1-p2, 2-p3, 3-normal, 4-tangent [for x amount of triangles]
-			auto BlockRelatedVertices = new std::vector<Vector3f>[CHUNKSIZE*CHUNKSIZE*CHUNKHEIGHT]; 
-			auto BlockRelatedMaterialData = new std::vector<Vector3u>[CHUNKSIZE * CHUNKSIZE * CHUNKHEIGHT]; 
+			auto BlockRelatedVertices = std::vector<std::vector<Vector3f>>(CHUNKSIZE*CHUNKSIZE*CHUNKHEIGHT); 
+			auto BlockRelatedMaterialData = std::vector<std::vector<Vector3u>>(CHUNKSIZE * CHUNKSIZE * CHUNKHEIGHT); 
 
 			std::vector<int> Indicies;
 			std::vector<unsigned int> MaterialData; 
@@ -514,12 +514,12 @@ namespace Open7Days {
 			MaterialData.clear(); 
 			
 			for (int x = 0; x < CHUNKSIZE * CHUNKSIZE * CHUNKHEIGHT; x++) {
-				BlockRelatedVertices->clear(); 
-				BlockRelatedMaterialData->clear(); 
+				BlockRelatedVertices[x].clear(); 
+				BlockRelatedMaterialData[x].clear(); 
 			}
 
-			delete[] BlockRelatedVertices; 
-			delete[] BlockRelatedMaterialData;
+			BlockRelatedVertices.clear(); 
+			BlockRelatedMaterialData.clear(); 
 
 
 		}
@@ -542,9 +542,8 @@ namespace Open7Days {
 			Vertices.clear();
 			Normals.clear();
 
-
-			delete[] BlockWeights;
-			delete[] BlockMaterials; 
+			BlockWeights.clear(); 
+			BlockMaterials.clear(); 
 
 			//delete Blocks; 
 

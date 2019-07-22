@@ -36,7 +36,7 @@ public:
 	sf::RenderWindow * GetRawWindow();
 
 
-	inline Window() : Resolution(0), Fullscreen(false), RawWindow(nullptr), Title("Open7Days²"), FrameCount(0) {}
+	inline Window() : Resolution(0), Fullscreen(false), RawWindow(nullptr), Title("Open7Days	"), FrameCount(0) {}
 	Window(Vector2i Resolution, bool Fullscreen);
 	~Window();
 };

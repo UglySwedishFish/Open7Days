@@ -83,7 +83,6 @@ namespace Open7Days {
 				const aiVector3D* VertexPos = &(aiMesh->mVertices[i]);
 				const aiVector3D* VertexNormal = &(aiMesh->mNormals[i]);
 				const aiVector3D* VertexTextureCoordinate = aiMesh->HasTextureCoords(0) ? &(aiMesh->mTextureCoords[0][i]) : &aiVector3D(0);
-				const aiVector3D* VertexTangent = aiMesh->HasTangentsAndBitangents() ? &(aiMesh->mTangents[i]) : &aiVector3D(0);
 
 				//if (!aiMesh->HasTangentsAndBitangents())
 				//	std::cout << "Warning: model does not have proper tangents!\n"; 

@@ -2,8 +2,7 @@
 #include <iostream>
 
 namespace Open7Days {
-	void Pipeline::Prepare(Window & Window, Camera & Camera)
-	{
+	void Pipeline::Prepare(Window & Window, Camera & Camera) {
 
 		
 
@@ -34,8 +33,7 @@ namespace Open7Days {
 		//glCullFace(GL_BACK); 
 
 	}
-	void Pipeline::Run(Window & Window, Camera & Camera)
-	{
+	void Pipeline::Run(Window & Window, Camera & Camera) {
 
 		bool Running = true;
 		sf::Event Event;

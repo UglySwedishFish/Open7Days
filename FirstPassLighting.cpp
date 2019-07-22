@@ -2,8 +2,7 @@
 
 namespace Open7Days {
 	namespace Rendering {
-		void FirstPassLighting::Prepare(Window& Window)
-		{
+		void FirstPassLighting::Prepare(Window& Window) {
 
 			FirstPassLightingBuffer = MultiPassFrameBufferObject(Window.GetResolution(), 2, { GL_RGB16F, GL_RGB16F }, false); 
 			FirstPassLightingShader = Shader("Shaders/FirstPassLighting"); 
@@ -26,8 +25,7 @@ namespace Open7Days {
 
 
 		}
-		void FirstPassLighting::ReloadShader()
-		{
+		void FirstPassLighting::ReloadShader() {
 			FirstPassLightingShader.Reload("Shaders/FirstPassLighting");
 
 			FirstPassLightingShader.Bind();
@@ -44,8 +42,7 @@ namespace Open7Days {
 
 			FirstPassLightingShader.UnBind();
 		}
-		void FirstPassLighting::RenderFirstLightingPass(Window& Window, Camera& Camera, DeferredRenderer &Deferred, ShadowMapper &Shadows, IndirectDiffuseLighting& Diffuse, CubeMapRenderer& CubeMap, WaterRenderer& Water)
-		{
+		void FirstPassLighting::RenderFirstLightingPass(Window& Window, Camera& Camera, DeferredRenderer &Deferred, ShadowMapper &Shadows, IndirectDiffuseLighting& Diffuse, CubeMapRenderer& CubeMap, WaterRenderer& Water) {
 
 			FirstPassLightingBuffer.Bind(); 
 
@@ -64,7 +61,8 @@ namespace Open7Days {
 			Deferred.DeferredRawBuffer.BindDepthImage(4);
 			Water.WaterBuffer.BindDepthImage(5); 
 			Water.WaterBuffer.BindImage(6); 
-
+			glActiveTexture(GL_TEXTURE7); 
+			glBindTexture(GL_TEXTURE_2D_ARRAY, Water.WaterNormalTexture); 
 
 			//CubeMap.RawDeferred;
 

@@ -3,8 +3,7 @@
 
 namespace Open7Days {
 	namespace Rendering {
-		void Voxelizer::PrepareVoxelizer()
-		{
+		void Voxelizer::PrepareVoxelizer() {
 
 			for(int i=0;i<6;i++)
 			Texture[i] = VoxelTexture(VOXEL_VOLUME_RESOLUTION, 4);
@@ -20,8 +19,7 @@ namespace Open7Days {
 			VoxelizingShader.UnBind(); 
 
 		}
-		void Voxelizer::VoxelizeScene(Camera& Camera, Window& Window, ShadowMapper &Shadows, ChunkContainer& Chunks)
-		{
+		void Voxelizer::VoxelizeScene(Camera& Camera, Window& Window, ShadowMapper &Shadows, ChunkContainer& Chunks) {
 
 			int ToUpdate = UpdateQueue[Window.GetFrameCount() % 7]; 
 			int ToUpdateActual = ToUpdate * 2 + ActiveTexture[ToUpdate]; 
@@ -74,8 +72,7 @@ namespace Open7Days {
 
 
 		}
-		void Voxelizer::SetUniforms(Shader& Shader, int StartingTexture)
-		{
+		void Voxelizer::SetUniforms(Shader& Shader, int StartingTexture) {
 
 			for (int i = 0; i < 3; i++) {
 
@@ -89,8 +86,7 @@ namespace Open7Days {
 			}
 
 		}
-		void Voxelizer::ReloadVoxelizer()
-		{
+		void Voxelizer::ReloadVoxelizer() {
 			VoxelizingShader.Reload("Shaders/Voxelizer", true);
 
 

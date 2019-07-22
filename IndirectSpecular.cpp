@@ -5,8 +5,7 @@ namespace Open7Days {
 
 		
 
-		void IndirectSpecularLighting::PrepareIndirectSpecularLighting(Window& Window)
-		{
+		void IndirectSpecularLighting::PrepareIndirectSpecularLighting(Window& Window) {
 			IndirectSpecularBuffer = FrameBufferObjectPreviousData(Window.GetResolution(), GL_RGBA16F,false);
 
 			IndirectSpecularShader = Shader("Shaders/IndirectSpecular");
@@ -30,8 +29,7 @@ namespace Open7Days {
 
 		}
 
-		void IndirectSpecularLighting::RenderIndirectSpecularLighting(Window& Window, Camera& Camera, DeferredRenderer& Deferred, CubeMapRenderer& CubeMap, FirstPassLighting& FirstPassLighting, WaterRenderer& Water,TextureCubeMap& Sky)
-		{
+		void IndirectSpecularLighting::RenderIndirectSpecularLighting(Window& Window, Camera& Camera, DeferredRenderer& Deferred, CubeMapRenderer& CubeMap, FirstPassLighting& FirstPassLighting, WaterRenderer& Water,TextureCubeMap& Sky) {
 			
 			IndirectSpecularBuffer.Bind(); 
 
@@ -75,8 +73,7 @@ namespace Open7Days {
 			
 		}
 
-		void IndirectSpecularLighting::ReloadIndirectSpecular()
-		{
+		void IndirectSpecularLighting::ReloadIndirectSpecular() {
 			IndirectSpecularShader.Reload("Shaders/IndirectSpecular");
 
 			IndirectSpecularShader.Bind();

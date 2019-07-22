@@ -22,8 +22,7 @@ namespace Open7Days {
 			CubeLighting.UnBind();
 
 		}
-		void CubeMapRenderer::RenderToCubeMap(Window& Window, Camera& Camera, DeferredRenderer& Deferred, ShadowMapper& Shadows, ChunkContainer& Chunks)
-		{
+		void CubeMapRenderer::RenderToCubeMap(Window& Window, Camera& Camera, DeferredRenderer& Deferred, ShadowMapper& Shadows, ChunkContainer& Chunks) {
 			
 			RawDeferred.Bind(); 
 

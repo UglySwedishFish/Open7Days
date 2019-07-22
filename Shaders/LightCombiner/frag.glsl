@@ -123,7 +123,7 @@ vec2 ScreenSpaceTracing(vec3 ViewPos, vec3 Normal) {
 
 float Fog(vec3 WorldPos, vec3 CamPos) {
 
-	float BaseDistance = min(distance(WorldPos, CamPos) / 64.,1.0); 
+	float BaseDistance = min(distance(WorldPos, CamPos) / 90.,1.0); 
 
 	return pow(BaseDistance,4.0); 
 

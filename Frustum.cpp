@@ -2,8 +2,7 @@
 
 
 //https://github.com/Hopson97/MineCraft-One-Week-Challenge/blob/a17cb344ebd61f0349f375a247d559e607d0dc06/Source/Maths/Frustum.cpp
-void Open7Days::Frustum::Update(Matrix4f Matrix)
-{
+void Open7Days::Frustum::Update(Matrix4f Matrix) {
 
 	Planes[FrustumPlanes::Left].Normal.x = Matrix[0][3] + Matrix[0][0];
 	Planes[FrustumPlanes::Left].Normal.y = Matrix[1][3] + Matrix[1][0];
@@ -50,8 +49,7 @@ void Open7Days::Frustum::Update(Matrix4f Matrix)
 
 }
 
-bool Open7Days::Frustum::InFrustum(FrustumAABB Box)
-{
+bool Open7Days::Frustum::InFrustum(FrustumAABB Box) {
 	bool result = true;
 	for (auto& plane : Planes)
 	{

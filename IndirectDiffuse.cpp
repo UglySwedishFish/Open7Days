@@ -5,8 +5,7 @@ namespace Open7Days {
 
 
 
-		void IndirectDiffuseLighting::PrepareIndirectDiffuseLighting(Window &Window)
-		{
+		void IndirectDiffuseLighting::PrepareIndirectDiffuseLighting(Window &Window) {
 
 			//IndirectDiffusePongBuffer = MultiPassFrameBufferObject(Window.GetResolution() / 2, 3, { GL_RGB32F, GL_RGB16F, GL_RGB16F }); //useful for linear interpolation of the final image 
 
@@ -42,8 +41,7 @@ namespace Open7Days {
 
 		}
 
-		void IndirectDiffuseLighting::RenderIndirectDiffuseLighting(Window &Window, Camera &Camera, DeferredRenderer & Deferred, ShadowMapper & Shadows, Voxelizer & Voxels, TextureCubeMap& Sky)
-		{
+		void IndirectDiffuseLighting::RenderIndirectDiffuseLighting(Window &Window, Camera &Camera, DeferredRenderer & Deferred, ShadowMapper & Shadows, Voxelizer & Voxels, TextureCubeMap& Sky) {
 			
 			IndirectDiffuseTemporalBuffer.Bind();
 

@@ -67,8 +67,9 @@ namespace Open7Days {
 				DepthBuffer(0),
 				Texture{},
 				FrameBuffer(0),
-				Resolution(0)
-			{}
+				Resolution(0){
+			
+			}
 
 			void Bind();
 			void UnBind(Window Window);
@@ -82,8 +83,9 @@ namespace Open7Days {
 				DepthBuffer(0),
 				Texture{},
 				FrameBuffer(0),
-				Resolution(0)
-			{}
+				Resolution(0){
+			
+			}
 
 			void Bind();
 			void UnBind(Window Window);

@@ -1,11 +1,11 @@
 #pragma once
 
 #include <Shader.h>
-#include <assimp\cimport.h>
-#include <assimp\mesh.h>
-#include <assimp\Importer.hpp>
-#include <assimp\scene.h>
-#include <assimp\postprocess.h>
+#include <assimp/cimport.h>
+#include <assimp/mesh.h>
+#include <assimp/Importer.hpp>
+#include <assimp/scene.h>
+#include <assimp/postprocess.h>
 
 namespace Open7Days {
 	namespace Rendering {
@@ -53,8 +53,7 @@ namespace Open7Days {
 			inline Model(const char* Model) : 
 				VAO(),
 				VBO{},
-				ModelData(Mesh())
-			{
+				ModelData(Mesh()) {
 				LoadMeshData(Model, ModelData); 
 				PrepareForRendering(); 
 			}
@@ -62,8 +61,8 @@ namespace Open7Days {
 			inline Model() :
 				VAO(),
 				VBO{},
-				ModelData(Mesh())
-			{}
+				ModelData(Mesh()) {
+			}
 
 			void PrepareForRendering(); 
 			void Draw(); 

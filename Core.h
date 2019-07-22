@@ -60,21 +60,18 @@ namespace Open7Days {
 		template<typename T>
 		T Interpolate(T A, T B, T X);
 		template<typename T, typename V>
-		void Move_2DXY(V & Pos, T Speed, T Rotation, T FrameTime)
-		{
+		void Move_2DXY(V & Pos, T Speed, T Rotation, T FrameTime) {
 			Pos.x -= cos(Rotation*T(PI / 180.))*Speed*FrameTime;
 			Pos.y -= sin(Rotation*T(PI / 180.))*Speed*FrameTime;
 
 		}
 		template<typename T, typename V>
-		void Move_2DXZ(V & Pos, T Speed, T Rotation, T FrameTime)
-		{
+		void Move_2DXZ(V & Pos, T Speed, T Rotation, T FrameTime) {
 			Pos.x -= cos(Rotation*T(PI / 180.))*Speed*FrameTime;
 			Pos.z -= sin(Rotation*T(PI / 180.))*Speed*FrameTime;
 		}
 		template<typename T, typename V>
-		void Move_3D(V & Pos, T Speed, T RotationX, T RotationY, T FrameTime, bool Forward = false)
-		{
+		void Move_3D(V & Pos, T Speed, T RotationX, T RotationY, T FrameTime, bool Forward = false) {
 
 			float HMultiplier = Forward ? -cos(RotationX*(PI / 180.)) : cos(RotationX*(PI / 180.));
 
@@ -139,8 +136,7 @@ namespace Open7Days {
 		Matrix4f ModelMatrix(Vector3f Position, Vector3f Rotation);
 		Matrix4f ShadowOrthoMatrix(float edge, float znear, float zfar);
 		template<typename T>
-		const T Lerp(T A, T B, T F)
-		{
+		const T Lerp(T A, T B, T F) {
 			return A + F * (B - A);
 		}
 

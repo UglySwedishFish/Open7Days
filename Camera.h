@@ -24,8 +24,7 @@ namespace Open7Days {
 			PrevView(Matrix4f(0.)),
 			Position(Vector3f(0.)),
 			Rotation(Vector3f(0.)),
-			ShadowCamera(false)
-		{
+			ShadowCamera(false)	{
 
 		}
 		inline void SetPosition(Vector3f Position) {

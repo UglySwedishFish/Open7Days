@@ -14,10 +14,9 @@ uniform sampler2D BlueNoise;
 uniform sampler2D IndirectDiffuse; 
 uniform sampler2D Depth; 
 uniform sampler2D WaterDepth; 
-uniform sampler2D WaterNormal; 
+uniform sampler2D WaterNormal;
+uniform sampler2DArray WaterNormalMap; 
 uniform sampler2D ShadowMaps[3]; 
-
-
 
 
 uniform float Time; 
@@ -37,6 +36,18 @@ uniform mat4 InverseProject;
 uniform vec3 ShadowDirection; 
 uniform vec3 CameraPosition; 
 uniform vec3 SunColor; 
+
+vec4 SampleInterpolatied(sampler2DArray Sampler,vec3 Coord) {
+
+	float BaseTime = mod(Coord.z, 119.); 
+
+	int Coord1 = int(floor(BaseTime)); 
+	int Coord2 = int(ceil(BaseTime))%119; 
+
+	return mix(texture(Sampler, vec3(Coord.xy, Coord1)), texture(Sampler,vec3(Coord.xy, Coord2)), fract(BaseTime)); 
+
+
+}
 
 
 void UnPackData(vec4 Packed, out vec3 Diffuse, out vec3 Normal, out float Depth) {
@@ -353,8 +364,9 @@ void main() {
 
 	Diffuse =  SunColor * DirectionalShadows.x; 
 
-
-	Diffuse += (clamp(40.0 - WorldPosition.y, 0.0, 5.0) * (ActualCaustics(WorldPosition.xz * 10.0, Time, 10) + vec3(0.0, 0.35, 0.5 )) * 5.0); 
+	float WaterHeight = 40.0 + SampleInterpolatied(WaterNormalMap, vec3(WorldPosition.xz*0.05,mod(Time*10.0, 119.))).w * 2.1; 
+	
+	Diffuse += (clamp(WaterHeight - WorldPosition.y, 0.0, 5.0) * (ActualCaustics(WorldPosition.xz * 10.0, Time, 10) + vec3(0.0, 0.35, 0.5 )) * 5.0); 
 
 
 	
@@ -363,7 +375,7 @@ void main() {
 
 	Diffuse += GetUpscaledIndirectDiffuse(NormalRoughness.xyz, LinearDepthSample);
 	
-	Diffuse /= WorldPosition.y > 40.0 ? 1.0 : clamp(pow(max(abs(WorldPosition.y - 40.0)-.333,0.0),2.0) * 5,1.0,10000.);
+	Diffuse /= WorldPosition.y > WaterHeight ? 1.0 : clamp(pow(max(abs(WorldPosition.y - WaterHeight)-.333,0.0),2.0) * 5,1.0,10000.);
 
 
 	float WaterDepthSample = texture(WaterDepth, TexCoord).x; 

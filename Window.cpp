@@ -1,77 +1,62 @@
-#include "window.h"
+#include "Window.h"
 
-void Window::SetResolution(Vector2i Resolution)
-{
+void Window::SetResolution(Vector2i Resolution) {
 	this->Resolution = Resolution;
 }
 
-Vector2i Window::GetResolution()
-{
+Vector2i Window::GetResolution() {
 	return Resolution;
 }
 
-void Window::SetFullscreen(bool Fullscreen)
-{
+void Window::SetFullscreen(bool Fullscreen) {
 	this->Fullscreen = Fullscreen;
 }
 
-bool Window::GetFullscreen()
-{
+bool Window::GetFullscreen() {
 	return Fullscreen;
 }
 
-void Window::SetTitle(const char * Title)
-{
+void Window::SetTitle(const char * Title) {
 	this->Title = Title;
 }
 
-const char * Window::GetTitle()
-{
+const char * Window::GetTitle() {
 	return Title;
 }
 
-float Window::GetFrameTime()
-{
+float Window::GetFrameTime() {
 	return FrameTime;
 }
 
-void Window::SetFrameTime(float _FrameTime)
-{
+void Window::SetFrameTime(float _FrameTime) {
 	FrameTime = _FrameTime;
 }
 
-void Window::SetTimeOpened(float _TimeOpened)
-{
+void Window::SetTimeOpened(float _TimeOpened) {
 	TimeOpened = _TimeOpened;
 }
 
-float Window::GetTimeOpened()
-{
+float Window::GetTimeOpened() {
 	return TimeOpened;
 }
 
-void Window::SetFrameCount(int _FrameCount)
-{
+void Window::SetFrameCount(int _FrameCount) {
 	FrameCount = _FrameCount;
 }
 
-int Window::GetFrameCount()
-{
+int Window::GetFrameCount() {
 	return FrameCount;
 }
 
-void Window::CursorVisible(bool Visible)
-{
+void Window::CursorVisible(bool Visible) {
 	RawWindow->setMouseCursorVisible(Visible);
 }
 
-sf::RenderWindow * Window::GetRawWindow()
-{
+sf::RenderWindow * Window::GetRawWindow() {
 	return RawWindow;
 }
 
-Window::Window(Vector2i Resolution, bool Fullscreen)
-{
+Window::Window(Vector2i Resolution, bool Fullscreen) {
 
 	this->Resolution = Resolution;
 	this->Fullscreen = Fullscreen;
@@ -96,8 +81,7 @@ Window::Window(Vector2i Resolution, bool Fullscreen)
 	gladLoadGL(); //prepare glad (needs to be AFTER window creation) 
 }
 
-Window::~Window()
-{
+Window::~Window() {
 	//RawWindow->close(); 
 	//delete RawWindow; 
 }

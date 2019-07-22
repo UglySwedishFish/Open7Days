@@ -5,8 +5,7 @@ namespace Open7Days {
 
 	namespace Rendering {
 
-		void Mesh::ClearVectors()
-		{
+		void Mesh::ClearVectors() {
 			Vertices.clear();
 			Normals.clear();
 			TexCoords.clear();
@@ -15,13 +14,11 @@ namespace Open7Days {
 			MeshEntries.clear(); 
 		}
 
-		Mesh::~Mesh()
-		{
+		Mesh::~Mesh() {
 			//ClearVectors(); 
 		}
 
-		void LoadMeshData(const char* file, Mesh& Model)
-		{
+		void LoadMeshData(const char* file, Mesh& Model) {
 			Assimp::Importer ObjectImporter;
 
 			const aiScene* Scene = ObjectImporter.ReadFile(file, aiProcess_Triangulate | aiProcess_CalcTangentSpace);
@@ -81,8 +78,7 @@ namespace Open7Days {
 			}
 		}
 
-		bool InitMesh(const aiMesh* aiMesh, Mesh& mesh)
-		{
+		bool InitMesh(const aiMesh* aiMesh, Mesh& mesh) {
 			for (unsigned int i = 0; i < aiMesh->mNumVertices; i++) {
 				const aiVector3D* VertexPos = &(aiMesh->mVertices[i]);
 				const aiVector3D* VertexNormal = &(aiMesh->mNormals[i]);
@@ -118,8 +114,7 @@ namespace Open7Days {
 			return true;
 		}
 
-		void Model::PrepareForRendering()
-		{
+		void Model::PrepareForRendering() {
 			glGenVertexArrays(1, &VAO);
 			glBindVertexArray(VAO);
 			glGenBuffers(4, VBO);
@@ -151,8 +146,7 @@ namespace Open7Days {
 			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 		}
 
-		void Model::Draw()
-		{
+		void Model::Draw() {
 			glBindVertexArray(VAO);
 
 			glDrawElements(GL_TRIANGLES, ModelData.Vertices.size(), GL_UNSIGNED_INT, nullptr);

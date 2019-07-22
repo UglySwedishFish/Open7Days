@@ -3,8 +3,7 @@
 
 namespace Open7Days {
 	namespace Rendering {
-		void WaterRenderer::PrepareWaterRenderer(Window& Window)
-		{
+		void WaterRenderer::PrepareWaterRenderer(Window& Window) {
 			WaterDeferred = Shader("Shaders/WaterDeferred"); 
 			WaterBuffer = FrameBufferObject(Window.GetResolution(), GL_RGB16F);
 			WaterMesh = Model("Models/WaterPlane.obj"); 
@@ -57,12 +56,10 @@ namespace Open7Days {
 
 
 		}
-		void WaterRenderer::ReloadWaterRenderer()
-		{
+		void WaterRenderer::ReloadWaterRenderer() {
 			WaterDeferred.Reload("Shaders/WaterDeferred"); 
 		}
-		void WaterRenderer::RenderWater(Camera& Camera, Window& Window)
-		{
+		void WaterRenderer::RenderWater(Camera& Camera, Window& Window) {
 
 			WaterBuffer.Bind(); 
 

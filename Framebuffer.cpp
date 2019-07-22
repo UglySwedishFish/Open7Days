@@ -1,4 +1,4 @@
-#include "framebuffer.h"
+#include "FrameBuffer.h"
 #include <iostream>
 
 
@@ -54,8 +54,7 @@ std::string GetFormatText(int X) {
 
 
 Open7Days::Rendering::FrameBufferObject::FrameBufferObject(glm::ivec2 Resolution, int Format, bool HasDepth, bool generatemip)
-	: GenerateMip(generatemip), FrameBuffer(0), ColorBuffer(0), DepthBuffer(0), Resolution(Resolution)
-{
+	: GenerateMip(generatemip), FrameBuffer(0), ColorBuffer(0), DepthBuffer(0), Resolution(Resolution) {
 	glGenFramebuffers(1, &FrameBuffer);
 	glBindFramebuffer(GL_FRAMEBUFFER, FrameBuffer);
 
@@ -95,19 +94,16 @@ Open7Days::Rendering::FrameBufferObject::FrameBufferObject(glm::ivec2 Resolution
 }
 
 Open7Days::Rendering::FrameBufferObject::FrameBufferObject()
-	: Resolution(0), FrameBuffer(0), ColorBuffer(0), DepthBuffer(0), GenerateMip(false)
-{
+	: Resolution(0), FrameBuffer(0), ColorBuffer(0), DepthBuffer(0), GenerateMip(false) {
 }
 
-void Open7Days::Rendering::FrameBufferObject::Bind()
-{
+void Open7Days::Rendering::FrameBufferObject::Bind() {
 	glBindFramebuffer(GL_FRAMEBUFFER, FrameBuffer);
 	glViewport(0, 0, Resolution.x, Resolution.y);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 }
 
-void Open7Days::Rendering::FrameBufferObject::UnBind(Window Window)
-{
+void Open7Days::Rendering::FrameBufferObject::UnBind(Window Window) {
 	glBindFramebuffer(GL_FRAMEBUFFER, NULL);
 	if (GenerateMip) {
 		glBindTexture(GL_TEXTURE_2D, ColorBuffer);
@@ -118,8 +114,7 @@ void Open7Days::Rendering::FrameBufferObject::UnBind(Window Window)
 }
 
 Open7Days::Rendering::MultiPassFrameBufferObject::MultiPassFrameBufferObject(glm::ivec2 Resolution, int stages, std::vector<int> Formats, bool HasDepth, bool generatemip) :
-	Resolution(Resolution), FrameBuffer(0), DepthBuffer(0), GenerateMip(generatemip), ColorBuffers{}
-{
+	Resolution(Resolution), FrameBuffer(0), DepthBuffer(0), GenerateMip(generatemip), ColorBuffers{} {
 	glGenFramebuffers(1, &FrameBuffer);
 	glBindFramebuffer(GL_FRAMEBUFFER, FrameBuffer);
 
@@ -166,19 +161,16 @@ Open7Days::Rendering::MultiPassFrameBufferObject::MultiPassFrameBufferObject(glm
 }
 
 Open7Days::Rendering::MultiPassFrameBufferObject::MultiPassFrameBufferObject() :
-	Resolution(0), FrameBuffer(0), DepthBuffer(0), GenerateMip(false), ColorBuffers{}
-{
+	Resolution(0), FrameBuffer(0), DepthBuffer(0), GenerateMip(false), ColorBuffers{} {
 }
 
-void Open7Days::Rendering::MultiPassFrameBufferObject::Bind()
-{
+void Open7Days::Rendering::MultiPassFrameBufferObject::Bind() {
 	glBindFramebuffer(GL_FRAMEBUFFER, FrameBuffer);
 	glViewport(0, 0, Resolution.x, Resolution.y);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 }
 
-void Open7Days::Rendering::MultiPassFrameBufferObject::UnBind(Window Window)
-{
+void Open7Days::Rendering::MultiPassFrameBufferObject::UnBind(Window Window) {
 	glBindFramebuffer(GL_FRAMEBUFFER, NULL);
 
 	if (GenerateMip) {
@@ -197,8 +189,7 @@ void Open7Days::Rendering::MultiPassFrameBufferObject::UnBind(Window Window)
 
 unsigned int PPQuadVBO, PPQuadVAO, PPCubeVBO, PPCubeVAO, WaterVAO, WaterVBO;
 
-void Open7Days::Rendering::PreparePostProcess()
-{
+void Open7Days::Rendering::PreparePostProcess() {
 	float vertices[] = {
 		-1.0f, 1.0f, 0.0f, 0.0f, 1.0f,
 		-1.0f, -1.0f, 0.0f, 0.0f, 0.0f,
@@ -305,80 +296,67 @@ void Open7Days::Rendering::PreparePostProcess()
 
 }
 
-void Open7Days::Rendering::DrawPostProcessQuad()
-{
+void Open7Days::Rendering::DrawPostProcessQuad() {
 	glBindVertexArray(PPQuadVAO);
 	glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
 	glBindVertexArray(0);
 }
-void Open7Days::Rendering::DrawPostProcessCube()
-{
+void Open7Days::Rendering::DrawPostProcessCube() {
 	glBindVertexArray(PPCubeVAO);
 	glDrawArrays(GL_TRIANGLES, 0, 36);
 	glBindVertexArray(0);
 }
 
-void Open7Days::Rendering::DrawWaterQuad()
-{
+void Open7Days::Rendering::DrawWaterQuad() {
 	glBindVertexArray(WaterVAO);
 	glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
 	glBindVertexArray(0);
 }
 
 Open7Days::Rendering::FrameBufferObjectPreviousData::FrameBufferObjectPreviousData(Vector2i Resolution, int Format, bool HasDepth, bool generatemip) : 
-	Buffers{ FrameBufferObject(Resolution,Format,HasDepth,generatemip),FrameBufferObject(Resolution,Format,HasDepth,generatemip) }, Buffer(0)
-{
+	Buffers{ FrameBufferObject(Resolution,Format,HasDepth,generatemip),FrameBufferObject(Resolution,Format,HasDepth,generatemip) }, Buffer(0) {
 
 }
 
-void Open7Days::Rendering::FrameBufferObjectPreviousData::Bind(bool Swap)
-{
+void Open7Days::Rendering::FrameBufferObjectPreviousData::Bind(bool Swap) {
 	if (Swap)
 		Buffer = !Buffer;
 
 	Buffers[Buffer].Bind();
 }
 
-void Open7Days::Rendering::FrameBufferObjectPreviousData::BindImage(int Target)
-{
+void Open7Days::Rendering::FrameBufferObjectPreviousData::BindImage(int Target) {
 	Buffers[Buffer].BindImage(Target);
 }
 
-void Open7Days::Rendering::FrameBufferObjectPreviousData::BindDepthImage(int Target)
-{
+void Open7Days::Rendering::FrameBufferObjectPreviousData::BindDepthImage(int Target) {
 	Buffers[Buffer].BindDepthImage(Target);
 }
 
-void Open7Days::Rendering::FrameBufferObjectPreviousData::BindImagePrevious(int Target)
-{
+void Open7Days::Rendering::FrameBufferObjectPreviousData::BindImagePrevious(int Target) {
 	Buffers[!Buffer].BindImage(Target);
 }
 
-void Open7Days::Rendering::FrameBufferObjectPreviousData::BindDepthImagePrevious(int Target)
-{
+void Open7Days::Rendering::FrameBufferObjectPreviousData::BindDepthImagePrevious(int Target) {
 	Buffers[!Buffer].BindDepthImage(Target);
 }
 
-void Open7Days::Rendering::FrameBufferObjectPreviousData::UnBind(Window& Window)
-{
+void Open7Days::Rendering::FrameBufferObjectPreviousData::UnBind(Window& Window) {
 	Buffers[Buffer].UnBind(Window);
 }
 
-void Open7Days::Rendering::FrameBufferObjectPreviousData::Swap()
-{
+void Open7Days::Rendering::FrameBufferObjectPreviousData::Swap() {
 	Buffer = !Buffer;
 }
 
 
-void Open7Days::Rendering::CubeMultiPassFrameBufferObject::Bind()
-{
+void Open7Days::Rendering::CubeMultiPassFrameBufferObject::Bind() {
 	glViewport(0, 0, Resolution.x, Resolution.y);
 
 	glBindFramebuffer(GL_FRAMEBUFFER, FrameBuffer);
 }
 
-void Open7Days::Rendering::CubeMultiPassFrameBufferObject::UnBind(Window Window)
-{
+void Open7Days::Rendering::CubeMultiPassFrameBufferObject::UnBind(Window Window) {
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 	glViewport(0, 0, Window.GetResolution().x, Window.GetResolution().y);
 	glBindTexture(GL_TEXTURE_CUBE_MAP, Texture[1]);
@@ -454,14 +432,12 @@ Open7Days::Rendering::CubeMultiPassFrameBufferObject::CubeMultiPassFrameBufferOb
 
 }
 
-void Open7Days::Rendering::CubeFrameBufferObject::Bind()
-{
+void Open7Days::Rendering::CubeFrameBufferObject::Bind() {
 	glViewport(0, 0, Resolution.x, Resolution.y);
 	glBindFramebuffer(GL_FRAMEBUFFER, FrameBuffer);
 }
 
-void Open7Days::Rendering::CubeFrameBufferObject::UnBind(Window Window)
-{
+void Open7Days::Rendering::CubeFrameBufferObject::UnBind(Window Window) {
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 	glViewport(0, 0, Window.GetResolution().x, Window.GetResolution().y);
 	glBindTexture(GL_TEXTURE_CUBE_MAP, Texture);
@@ -469,8 +445,7 @@ void Open7Days::Rendering::CubeFrameBufferObject::UnBind(Window Window)
 	glBindTexture(GL_TEXTURE_CUBE_MAP, 0);
 }
 
-Open7Days::Rendering::CubeFrameBufferObject::CubeFrameBufferObject(Vector2i Resolution, int Format, bool HasDepth)
-{
+Open7Days::Rendering::CubeFrameBufferObject::CubeFrameBufferObject(Vector2i Resolution, int Format, bool HasDepth) {
 	this->Resolution = Resolution;
 	glGenFramebuffers(1, &FrameBuffer);
 	// create depth cubemap texture

@@ -2,8 +2,7 @@
 
 namespace Open7Days {
 	namespace Rendering {
-		void DeferredRenderer::PrepareDeferredRendering(Window & Window, Camera & Camera)
-		{
+		void DeferredRenderer::PrepareDeferredRendering(Window & Window, Camera & Camera) {
 			DeferredRawBuffer = FrameBufferObject(Window.GetResolution(), GL_RGBA32F); 
 			DeferredUnwrappedBuffer = MultiPassFrameBufferObject(Window.GetResolution(), 3, { GL_RGBA8, GL_RGBA16F, GL_RGB32F }, false); 
 			
@@ -23,8 +22,7 @@ namespace Open7Days {
 
 
 		}
-		void DeferredRenderer::RenderToDeffered(Window & Window, Camera & Camera, ChunkContainer& Chunks)
-		{
+		void DeferredRenderer::RenderToDeffered(Window & Window, Camera & Camera, ChunkContainer& Chunks) {
 
 			DeferredRawBuffer.Bind(); 
 

@@ -3,27 +3,23 @@
 #include <iostream>
 #include <thread>
 
-double FindNoise1(int n, int seed)
-{
+double FindNoise1(int n, int seed) {
 	n += seed;
 	n = (n << 13) ^ n;
 	int nn = (n * (n * n * 60493 + 19990303) + 1376312589) & 0x7fffffff;
 	return 1.0 - ((double)nn / 1073741824.0);
 }
-double FindNoise2(double x, double y, int seed)
-{
+double FindNoise2(double x, double y, int seed) {
 
 	int n = (int)x + (int)y * 57;
 	return FindNoise1(n, seed);
 }
-double interpolate(double a, double b, double x)
-{
+double interpolate(double a, double b, double x) {
 	double ft = x * 3.1415;
 	double f = (1.0 - cos(ft)) * 0.5;
 	return a * (1.0 - f) + b * f;
 }
-double noise(double x, double y, int seed)
-{
+double noise(double x, double y, int seed) {
 	double floorx = (double)((int)x);//This is kinda a cheap way to floor a double integer.
 	double floory = (double)((int)y);
 	double s, t, u, v;//Integer declaration
@@ -250,8 +246,7 @@ namespace Open7Days {
 			return Material1 * 262144 + Material2 * 1024 + Material3 * 4 + Flag %4;
 		}
 
-		void Chunk::UpdateMesh(Materials::MaterialList* Materials)
-		{
+		void Chunk::UpdateMesh(Materials::MaterialList* Materials) {
 
 
 			//IDEA! brute force normal smoothing 
@@ -529,8 +524,7 @@ namespace Open7Days {
 
 		}
 
-		void Chunk::Draw(Matrix4f View, Matrix4f Project, Shader & Shader)
-		{
+		void Chunk::Draw(Matrix4f View, Matrix4f Project, Shader & Shader) {
 
 			Shader.SetUniform("IdentityMatrix", Project * View * Model);
 			Shader.SetUniform("ModelMatrix", Model);
@@ -543,8 +537,7 @@ namespace Open7Days {
 			glBindVertexArray(0);
 		}
 
-		Chunk::~Chunk()
-		{
+		Chunk::~Chunk() {
 
 			Vertices.clear();
 			Normals.clear();
@@ -562,8 +555,7 @@ namespace Open7Days {
 
 		}
 
-		void ChunkContainer::GenerateChunks(Camera& Camera, Materials::MaterialList* Materials)
-		{
+		void ChunkContainer::GenerateChunks(Camera& Camera, Materials::MaterialList* Materials) {
 
 			//step one, delete chunks outside of the players view
 
@@ -667,8 +659,7 @@ namespace Open7Days {
 
 		}
 
-		void ChunkContainer::RenderChunks(Matrix4f View, Matrix4f Project, Shader& Shader, int RenderDistanceOverload, Vector2f Position, Frustum* ViewFrustum)
-		{
+		void ChunkContainer::RenderChunks(Matrix4f View, Matrix4f Project, Shader& Shader, int RenderDistanceOverload, Vector2f Position, Frustum* ViewFrustum) {
 
 			for (auto& Chunk : DrawChunks) {
 

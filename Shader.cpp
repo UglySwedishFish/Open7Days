@@ -11,8 +11,7 @@
 
 
 
-unsigned int Open7Days::Rendering::LoadShader(unsigned int ShaderType, const std::string & File, unsigned int & Buffer, unsigned int BaseID, bool ReCreate)
-{
+unsigned int Open7Days::Rendering::LoadShader(unsigned int ShaderType, const std::string & File, unsigned int & Buffer, unsigned int BaseID, bool ReCreate) {
 	std::string source = ""; //all the shader code
 	std::ifstream file(File);
 
@@ -67,8 +66,7 @@ unsigned int Open7Days::Rendering::LoadShader(unsigned int ShaderType, const std
 Open7Days::Rendering::Shader::Shader(const std::string & vertex, const std::string & fragment) :
 	VertexShader(LoadShader(GL_VERTEX_SHADER, vertex, VertexBuffer, VertexShader)),
 	FragmentShader(LoadShader(GL_FRAGMENT_SHADER, fragment, FragmentBuffer, FragmentShader)),
-	ShaderID(glCreateProgram())
-{
+	ShaderID(glCreateProgram()) {
 	glAttachShader(ShaderID, VertexShader);
 	glAttachShader(ShaderID, FragmentShader);
 	glLinkProgram(ShaderID);
@@ -78,8 +76,7 @@ Open7Days::Rendering::Shader::Shader(const std::string & vertex, const std::stri
 	VertexShader(LoadShader(GL_VERTEX_SHADER, vertex, VertexBuffer, VertexShader)),
 	GeometryShader(LoadShader(GL_GEOMETRY_SHADER, geometry, GeometryBuffer, GeometryShader)),
 	FragmentShader(LoadShader(GL_FRAGMENT_SHADER, fragment, FragmentBuffer, FragmentShader)),
-	ShaderID(glCreateProgram())
-{
+	ShaderID(glCreateProgram()) {
 	glAttachShader(ShaderID, VertexShader);
 	glAttachShader(ShaderID, GeometryShader);
 	glAttachShader(ShaderID, FragmentShader);
@@ -87,8 +84,7 @@ Open7Days::Rendering::Shader::Shader(const std::string & vertex, const std::stri
 	glUseProgram(ShaderID);
 }
 
-Open7Days::Rendering::Shader::Shader(const std::string & Directory, bool HasGeometryShader)
-{
+Open7Days::Rendering::Shader::Shader(const std::string & Directory, bool HasGeometryShader) {
 	if (HasGeometryShader)
 		*this = Shader(Directory + "/vert.glsl", Directory + "/geom.glsl", Directory + "/frag.glsl");
 	else
@@ -99,82 +95,66 @@ Open7Days::Rendering::Shader::Shader() :
 	VertexShader(NULL),
 	FragmentShader(NULL),
 	GeometryShader(NULL),
-	ShaderID(NULL)
-{
+	ShaderID(NULL) {
 }
 
-void Open7Days::Rendering::Shader::Bind()
-{
+void Open7Days::Rendering::Shader::Bind() {
 	glUseProgram(ShaderID);
 }
 
-void Open7Days::Rendering::Shader::UnBind()
-{
+void Open7Days::Rendering::Shader::UnBind() {
 	glUseProgram(NULL);
 }
 
-void Open7Days::Rendering::Shader::SetUniform(const std::string & Name, int Value)
-{
+void Open7Days::Rendering::Shader::SetUniform(const std::string & Name, int Value) {
 	glUniform1i(glGetUniformLocation(ShaderID, Name.c_str()), Value);
 }
 
-void Open7Days::Rendering::Shader::SetUniform(const std::string & Name, size_t Value)
-{
+void Open7Days::Rendering::Shader::SetUniform(const std::string & Name, size_t Value) {
 	glUniform1i(glGetUniformLocation(ShaderID, Name.c_str()), Value);
 }
 
-void Open7Days::Rendering::Shader::SetUniform(const std::string & Name, float Value)
-{
+void Open7Days::Rendering::Shader::SetUniform(const std::string & Name, float Value) {
 	glUniform1f(glGetUniformLocation(ShaderID, Name.c_str()), Value);
 }
 
-void Open7Days::Rendering::Shader::SetUniform(const std::string & Name, bool Value)
-{
+void Open7Days::Rendering::Shader::SetUniform(const std::string & Name, bool Value) {
 	glUniform1i(glGetUniformLocation(ShaderID, Name.c_str()), Value);
 }
 
-void Open7Days::Rendering::Shader::SetUniform(const std::string & Name, Vector2f Value)
-{
+void Open7Days::Rendering::Shader::SetUniform(const std::string & Name, Vector2f Value) {
 	glUniform2f(glGetUniformLocation(ShaderID, Name.c_str()), Value.x, Value.y);
 }
 
-void Open7Days::Rendering::Shader::SetUniform(const std::string & Name, Vector3f Value)
-{
+void Open7Days::Rendering::Shader::SetUniform(const std::string & Name, Vector3f Value) {
 	glUniform3f(glGetUniformLocation(ShaderID, Name.c_str()), Value.x, Value.y, Value.z);
 }
 
-void Open7Days::Rendering::Shader::SetUniform(const std::string & Name, Vector4f Value)
-{
+void Open7Days::Rendering::Shader::SetUniform(const std::string & Name, Vector4f Value) {
 	glUniform4f(glGetUniformLocation(ShaderID, Name.c_str()), Value.x, Value.y, Value.z, Value.w);
 }
 
-void Open7Days::Rendering::Shader::SetUniform(const std::string & Name, Vector2i Value)
-{
+void Open7Days::Rendering::Shader::SetUniform(const std::string & Name, Vector2i Value) {
 	glUniform2i(glGetUniformLocation(ShaderID, Name.c_str()), Value.x, Value.y);
 }
 
-void Open7Days::Rendering::Shader::SetUniform(const std::string & Name, Vector3i Value)
-{
+void Open7Days::Rendering::Shader::SetUniform(const std::string & Name, Vector3i Value) {
 	glUniform3i(glGetUniformLocation(ShaderID, Name.c_str()), Value.x, Value.y, Value.z);
 }
 
-void Open7Days::Rendering::Shader::SetUniform(const std::string & Name, Vector4i Value)
-{
+void Open7Days::Rendering::Shader::SetUniform(const std::string & Name, Vector4i Value) {
 	glUniform4i(glGetUniformLocation(ShaderID, Name.c_str()), Value.x, Value.y, Value.z, Value.w);
 }
 
-void Open7Days::Rendering::Shader::SetUniform(const std::string & Name, Matrix4f Value, bool Transpose)
-{
+void Open7Days::Rendering::Shader::SetUniform(const std::string & Name, Matrix4f Value, bool Transpose) {
 	glUniformMatrix4fv(glGetUniformLocation(ShaderID, Name.c_str()), 1, Transpose, glm::value_ptr(Value));
 }
 
-void Open7Days::Rendering::Shader::SetUniform(const std::string& Name, Matrix3f Value, bool Transpose)
-{
+void Open7Days::Rendering::Shader::SetUniform(const std::string& Name, Matrix3f Value, bool Transpose) {
 	glUniformMatrix3fv(glGetUniformLocation(ShaderID, Name.c_str()), 1, Transpose, glm::value_ptr(Value));
 }
 
-void Open7Days::Rendering::Shader::Reload(const std::string& vertex, const std::string& fragment)
-{
+void Open7Days::Rendering::Shader::Reload(const std::string& vertex, const std::string& fragment) {
 
 
 	glDetachShader(ShaderID, VertexShader);
@@ -198,8 +178,7 @@ void Open7Days::Rendering::Shader::Reload(const std::string& vertex, const std::
 
 }
 
-void Open7Days::Rendering::Shader::Reload(const std::string& vertex, const std::string& fragment, const std::string& geometry)
-{
+void Open7Days::Rendering::Shader::Reload(const std::string& vertex, const std::string& fragment, const std::string& geometry) {
 	glDetachShader(ShaderID, VertexShader);
 	glDetachShader(ShaderID, FragmentShader);
 	glDetachShader(ShaderID, GeometryShader);
@@ -224,13 +203,11 @@ void Open7Days::Rendering::Shader::Reload(const std::string& vertex, const std::
 	glUseProgram(ShaderID);
 }
 
-void Open7Days::Rendering::Shader::Reload(const std::string& Directory)
-{
+void Open7Days::Rendering::Shader::Reload(const std::string& Directory) {
 	Reload(Directory + "/vert.glsl", Directory + "/frag.glsl");
 }
 
-void Open7Days::Rendering::Shader::Reload(const std::string& Directory, bool HasGeometryShader)
-{
+void Open7Days::Rendering::Shader::Reload(const std::string& Directory, bool HasGeometryShader) {
 	if(HasGeometryShader)
 		Reload(Directory + "/vert.glsl", Directory + "/frag.glsl", Directory + "/geom.glsl");
 	else 
@@ -238,8 +215,7 @@ void Open7Days::Rendering::Shader::Reload(const std::string& Directory, bool Has
 
 }
 
-Open7Days::Rendering::Shader::~Shader()
-{
+Open7Days::Rendering::Shader::~Shader() {
 	//TODO: free up shader
 }
 

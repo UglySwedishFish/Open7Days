@@ -14,8 +14,8 @@ namespace Open7Days {
 			inline VoxelTexture() :
 				ID(4294967295),
 				Resolution(4294967295),
-				Data(std::vector<GLfloat>())
-			{}
+				Data(std::vector<GLfloat>()) {
+			}
 
 
 
@@ -39,8 +39,7 @@ namespace Open7Days {
 				glBindTexture(GL_TEXTURE_3D, 0);
 			}
 
-			inline void Clear(Vector4u ClearColor)
-			{
+			inline void Clear(Vector4u ClearColor) {
 				unsigned char CCF[] = { ClearColor.r,ClearColor.g,ClearColor.b,ClearColor.a };
 				glBindTexture(GL_TEXTURE_3D, ID);
 				glClearTexImage(ID, 0, GL_RGBA, GL_FLOAT, 0);

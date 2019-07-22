@@ -6,18 +6,15 @@ namespace Open7Days {
 	namespace Rendering {
 
 		TextureGL::TextureGL(unsigned int id, Vector2i Resolution) :
-			ID(id), Resolution(Resolution)
-		{
+			ID(id), Resolution(Resolution) {
 
 		}
-		void TextureGL::Bind(unsigned int target)
-		{
+		void TextureGL::Bind(unsigned int target) {
 			glActiveTexture(GL_TEXTURE0 + target);
 			glBindTexture(GL_TEXTURE_2D, ID);
 		}
 
-		TextureGL LoadTextureGL(const std::string & Path)
-		{
+		TextureGL LoadTextureGL(const std::string & Path) {
 			unsigned int id;
 			sf::Image Image;
 
@@ -38,8 +35,7 @@ namespace Open7Days {
 			}
 		}
 
-		TextureCubeMap LoadHDRI(const char* name, bool linear, bool mipmaps, Shader& EquirectangularToCubeMapShader)
-		{
+		TextureCubeMap LoadHDRI(const char* name, bool linear, bool mipmaps, Shader& EquirectangularToCubeMapShader) {
 
 
 			TextureGL RawHDRIMap = LoadTextureGL(name);
@@ -99,12 +95,10 @@ namespace Open7Days {
 
 
 		TextureCubeMap::TextureCubeMap(unsigned int id, glm::ivec2 res) : 
-			ID(id), Resolution(res)
-		{
+			ID(id), Resolution(res) {
 		}
 
-		void TextureCubeMap::Bind(unsigned int target)
-		{
+		void TextureCubeMap::Bind(unsigned int target) {
 			glActiveTexture(GL_TEXTURE0 + target);
 			glBindTexture(GL_TEXTURE_CUBE_MAP, ID);
 		}

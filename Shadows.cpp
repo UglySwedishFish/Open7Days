@@ -5,15 +5,13 @@
 namespace Open7Days {
 	namespace Rendering {
 
-		void Move(Vector3f & Pos, float Speed, float RotationX, float RotationY)
-		{
+		void Move(Vector3f & Pos, float Speed, float RotationX, float RotationY) {
 			Pos.x -= (cos(RotationY*(PI / 180.)) * cos(RotationX*(PI / 180.)))*Speed;
 			Pos.y += sin(RotationX*(PI / 180.))*Speed;
 			Pos.z -= (sin(RotationY*(PI / 180.)) * cos(RotationX*(PI / 180.)))*Speed;
 		}
 
-		void ShadowMapper::Prepare(Camera Camera)
-		{
+		void ShadowMapper::Prepare(Camera Camera) {
 
 			Orientation = Vector3f(0.);
 
@@ -35,8 +33,7 @@ namespace Open7Days {
 
 		int BlurSize[] = { 3,2,1 }; 
 		
-		void ShadowMapper::UpdateShadowMapCascades(Window & Window, Camera & Camera, ChunkContainer & Chunks)
-		{
+		void ShadowMapper::UpdateShadowMapCascades(Window & Window, Camera & Camera, ChunkContainer & Chunks) {
 
 			int ToUpdate = UpdateQueue[Window.GetFrameCount() % 7]; 
 			
@@ -93,8 +90,7 @@ namespace Open7Days {
 
 			
 		}
-		void ShadowMapper::BindAndSetUniforms(Shader & Shader, int StartingTexture)
-		{
+		void ShadowMapper::BindAndSetUniforms(Shader & Shader, int StartingTexture) {
 
 			Shader.SetUniform("ShadowDirection", glm::normalize(Orientation)); 
 			Shader.SetUniform("SunColor", Vector3f(0.988, 0.831, 0.251));

@@ -5,8 +5,7 @@ namespace Open7Days {
 
 
 
-		void LightCombiner::PrepareLightCombiner()
-		{
+		void LightCombiner::PrepareLightCombiner() {
 
 			LightCombinerShader = Shader("Shaders/LightCombiner"); 
 
@@ -27,8 +26,7 @@ namespace Open7Days {
 
 		}
 
-		void LightCombiner::CombineLighting(Window& Window, Camera& Camera, DeferredRenderer& Deferred, FirstPassLighting& First, IndirectSpecularLighting& IndirectSpecular, WaterRenderer & Water,TextureCubeMap& Sky)
-		{
+		void LightCombiner::CombineLighting(Window& Window, Camera& Camera, DeferredRenderer& Deferred, FirstPassLighting& First, IndirectSpecularLighting& IndirectSpecular, WaterRenderer & Water,TextureCubeMap& Sky) {
 
 			LightCombinerShader.Bind(); 
 
@@ -55,8 +53,7 @@ namespace Open7Days {
 
 		}
 
-		void LightCombiner::ReloadLightCombiner()
-		{
+		void LightCombiner::ReloadLightCombiner() {
 			LightCombinerShader.Reload("Shaders/LightCombiner");
 
 			LightCombinerShader.Bind();

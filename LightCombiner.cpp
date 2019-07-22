@@ -36,6 +36,7 @@ namespace Open7Days {
 			LightCombinerShader.SetUniform("ProjectionMatrix", Camera.Project);
 			LightCombinerShader.SetUniform("InverseView", glm::inverse(Camera.View));
 			LightCombinerShader.SetUniform("InverseProject", glm::inverse(Camera.Project));
+			LightCombinerShader.SetUniform("CameraPosition", Camera.Position);
 
 			
 			First.FirstPassLightingBuffer.BindImage(0, 0); 

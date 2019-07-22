@@ -18,6 +18,7 @@ uniform mat4 ViewMatrix;
 uniform mat4 ProjectionMatrix; 
 uniform mat4 InverseView; 
 uniform mat4 InverseProject; 
+uniform vec3 CameraPosition; 
 
 float A = 0.15;
 float B = 0.50;
@@ -37,7 +38,7 @@ vec3 Fresnel(vec3 Incident, vec3 Normal, vec3 Specular, float Roughness) {
 }
 
 float FresnelWater(vec3 Incident, vec3 Normal) {
-	return 0.04 + 0.96 * pow(max(1.0 - dot(Incident,Normal),0.0), 5.0);
+	return 0.04 + 0.96 * pow(max(1.0 - abs(dot(Incident,Normal)),0.0), 5.0);
 }
 
 vec4 CalculateViewSpacePosition(float z) {
@@ -120,6 +121,15 @@ vec2 ScreenSpaceTracing(vec3 ViewPos, vec3 Normal) {
 }
 
 
+float Fog(vec3 WorldPos, vec3 CamPos) {
+
+	float BaseDistance = min(distance(WorldPos, CamPos) / 64.,1.0); 
+
+	return pow(BaseDistance,4.0); 
+
+}
+
+
 void main() {
 	
 	vec4 AlbedoSample = texture(Albedo, TexCoord); 
@@ -129,7 +139,7 @@ void main() {
 	float Metalness = AlbedoSample.a; 
 
 	vec3 Diffuse = texture(FirstPassDiffuse, TexCoord).xyz; 
-	vec3 Specular = texture(IndirectSpecular, TexCoord).xyz; 
+	vec3 Specular = texture(IndirectSpecular, TexCoord).xyz + texture(FirstPassSpecular, TexCoord).xyz; 
 
 	vec3 Incident = -normalize(vec3(inverse(ProjectionMatrix * mat4(mat3(ViewMatrix))) * vec4(TexCoord * 2. - 1., 1., 1.))); 
 
@@ -142,41 +152,63 @@ void main() {
 	float DepthSample = texture(Depth, TexCoord).x; 
 	float WaterDepth = texture(WaterDepth, TexCoord).x; 
 
+	vec3 WorldPosition = vec3(InverseView * CalculateViewSpacePosition(DepthSample)); 
+
+
 	RawNormalSample.xyz = WaterDepth > DepthSample ? RawNormalSample.xyz : texture(WaterNormal, TexCoord).xyz; 
 
+	vec3 BackGround = mix(vec3(0.3), pow(texture(Sky, -Incident).xyz,vec3(3.0)) * 3.,  max(-Incident.y-0.1,0.0)); 
+
+
 	if(length(RawNormalSample.xyz) < 0.5) {
-		Lighting = texture(Sky, -Incident).xyz * 3.; 
+		Lighting = BackGround; 
+
 	}
 	else {
-		if(WaterDepth > DepthSample) 
+		if(WaterDepth > DepthSample) {
 		Lighting = Diffuse * DiffuseColor + Specular * SpecularColor;
+
+		Lighting = mix(Lighting, BackGround, Fog(CameraPosition,WorldPosition)); 
+
+		}
 		else {
+
+			vec3 NormalSampleRefraction = normalize(RawNormalSample.xyz * vec3(1.0,0.125,1.0)); 
+
 
 			vec3 BackGroundLighting = ActualAlbedo.xyz * Diffuse; 
 
 			vec3 WaterViewPosition = CalculateViewSpacePosition(WaterDepth).xyz; 
-			vec3 WorldPosition = vec3(InverseView * CalculateViewSpacePosition(DepthSample)); 
+
+			vec3 WaterWorldPosition = vec3(InverseView * vec4(WaterViewPosition,1.0)); 
+
 
 			WaterDepth = LinearlizeDepth(WaterDepth); 
 			DepthSample = LinearlizeDepth(DepthSample); 
 
-			vec2 RefractedLightingCoord = ScreenSpaceTracing(WaterViewPosition, vec3(vec4(RawNormalSample.xyz,0.0) * InverseView)); 
+			vec2 RefractedLightingCoord = ScreenSpaceTracing(WaterViewPosition, vec3(vec4(NormalSampleRefraction.xyz,0.0) * InverseView)); 
 
 			RefractedLightingCoord = (abs(RefractedLightingCoord.x) < 1.0 && abs(RefractedLightingCoord.y) < 1.0) ? (RefractedLightingCoord * 0.5 + 0.5) : TexCoord; 
 
-			vec3 RefractedLighting = texture(Albedo, RefractedLightingCoord).xyz * texture(FirstPassDiffuse, RefractedLightingCoord).xyz; 
+			vec3 RefractedLightingRaw = texture(Albedo, RefractedLightingCoord).xyz * texture(FirstPassDiffuse, RefractedLightingCoord).xyz; 
+			vec3 RefractedLighting = RefractedLightingRaw; 
 			vec3 HitWorldPosition = vec3(InverseView * vec4(CalculateViewSpacePosition(texture(Depth, RefractedLightingCoord).x).xyz,1.0)); 
-			RefractedLighting /= clamp(pow(max(abs(HitWorldPosition.y - 40.0)-.333,0.0),2.0) * 5,1.0,10000.); 
+			RefractedLighting /= clamp(pow(max(abs(HitWorldPosition.y - WaterWorldPosition.y)-.333,0.0),2.0) * 5,1.0,10000.); 
 
 
 
-			RefractedLighting = mix(RefractedLighting * mix(vec3(0.0, 0.35, 0.5 ),vec3(0.0,0.5,0.35),clamp(abs(40.0-WorldPosition.y),0.0,2.0)*0.5)  * 2.0, Specular, FresnelWater(Incident, RawNormalSample.xyz)); 
+			RefractedLighting = mix(RefractedLighting * mix(vec3(0.0, 0.35, 0.5 ),vec3(0.0,0.5,0.35),clamp(abs(WaterWorldPosition.y-WorldPosition.y),0.0,2.0)*0.5)  * 2.0, Specular, FresnelWater(Incident, RawNormalSample.xyz)); 
 
-			Lighting = mix(BackGroundLighting,RefractedLighting,clamp(abs(40.0-WorldPosition.y), 0.0, 1.0)); 
-			
+			Lighting = mix(RefractedLightingRaw,RefractedLighting,clamp(abs(WaterWorldPosition.y-WorldPosition.y), 0.0, 1.0)); 
+			Lighting = mix(BackGroundLighting,Lighting,clamp(abs(WaterWorldPosition.y-WorldPosition.y), 0.0, .25)*4.); 
+
+			Lighting = mix(Lighting, BackGround, Fog(CameraPosition,WaterWorldPosition)); 
+
 
 		}
 	}
+
+	 
 
 
 	Lighting = Uncharted2Tonemap(Lighting); 

@@ -6,7 +6,8 @@ namespace Open7Days {
 		void WaterRenderer::PrepareWaterRenderer(Window& Window)
 		{
 			WaterDeferred = Shader("Shaders/WaterDeferred"); 
-			WaterBuffer = FrameBufferObject(Window.GetResolution(), GL_RGB16F); 
+			WaterBuffer = FrameBufferObject(Window.GetResolution(), GL_RGB16F);
+			WaterMesh = Model("Models/WaterPlane.obj"); 
 
 			glGenTextures(1, &WaterNormalTexture); 
 
@@ -78,7 +79,7 @@ namespace Open7Days {
 			glActiveTexture(GL_TEXTURE0); 
 			glBindTexture(GL_TEXTURE_2D_ARRAY, WaterNormalTexture); 
 
-			DrawWaterQuad(); 
+			WaterMesh.Draw(); 
 
 			WaterDeferred.UnBind(); 
 

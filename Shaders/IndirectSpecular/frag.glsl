@@ -256,7 +256,7 @@ void main() {
 		vec4 SpecularSample = texture(Test, TraceCubeMap(CubeMapWorldPosition,Direction , WorldPosition + NormalRoughness.xyz * 0.5, CameraPosition,0.0, mix(2.0,4.0,Roughness), mix(0.5,1.0,Roughness), int(mix(4,2,Roughness)), int(mix(12,6,Roughness)), Hit, Traversal, 1.25)); 
 	
 		SpecularSample.xyz = max(SpecularSample.xyz, vec3(0.)); 
-		SpecularSample.xyz += SpecularSample.aaa * texture(Sky, Direction).xyz; 
+		SpecularSample.xyz += SpecularSample.aaa * pow(texture(Sky, Direction).xyz,vec3(2.2)); 
 
 		IndirectSpecular.xyz  = SpecularSample.xyz; 
 

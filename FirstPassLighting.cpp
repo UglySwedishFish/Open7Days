@@ -15,9 +15,9 @@ namespace Open7Days {
 			FirstPassLightingShader.SetUniform("BlueNoise", 2);
 			FirstPassLightingShader.SetUniform("IndirectDiffuse", 3);
 			FirstPassLightingShader.SetUniform("Depth", 4);
-			FirstPassLightingShader.SetUniform("Albedo", 5);
-			FirstPassLightingShader.SetUniform("Test", 6);
-			FirstPassLightingShader.SetUniform("CubeMapWorldPosition", 7);
+			FirstPassLightingShader.SetUniform("WaterDepth", 5);
+			FirstPassLightingShader.SetUniform("WaterNormal", 6);
+			FirstPassLightingShader.SetUniform("WaterNormalMap", 7);
 
 			FirstPassLightingShader.UnBind(); 
 
@@ -37,13 +37,14 @@ namespace Open7Days {
 			FirstPassLightingShader.SetUniform("BlueNoise", 2);
 			FirstPassLightingShader.SetUniform("IndirectDiffuse", 3);
 			FirstPassLightingShader.SetUniform("Depth", 4);
-			FirstPassLightingShader.SetUniform("Albedo", 5);
-			FirstPassLightingShader.SetUniform("Test", 6);
-			FirstPassLightingShader.SetUniform("CubeMapWorldPosition", 7);
+			FirstPassLightingShader.SetUniform("WaterDepth", 5);
+			FirstPassLightingShader.SetUniform("WaterNormal", 6);
+			FirstPassLightingShader.SetUniform("WaterNormalMap", 7);
+
 
 			FirstPassLightingShader.UnBind();
 		}
-		void FirstPassLighting::RenderFirstLightingPass(Window& Window, Camera& Camera, DeferredRenderer &Deferred, ShadowMapper &Shadows, IndirectDiffuseLighting& Diffuse, CubeMapRenderer& CubeMap)
+		void FirstPassLighting::RenderFirstLightingPass(Window& Window, Camera& Camera, DeferredRenderer &Deferred, ShadowMapper &Shadows, IndirectDiffuseLighting& Diffuse, CubeMapRenderer& CubeMap, WaterRenderer& Water)
 		{
 
 			FirstPassLightingBuffer.Bind(); 
@@ -51,6 +52,8 @@ namespace Open7Days {
 			FirstPassLightingShader.Bind(); 
 
 			FirstPassLightingShader.SetUniform("InverseView", glm::inverse(Camera.View)); 
+			FirstPassLightingShader.SetUniform("InverseProject", glm::inverse(Camera.Project));
+
 			FirstPassLightingShader.SetUniform("CameraPosition", Camera.Position);
 			FirstPassLightingShader.SetUniform("Time", Window.GetTimeOpened());
 
@@ -59,13 +62,9 @@ namespace Open7Days {
 			BlueNoise.Bind(2); 
 			Diffuse.IndirectDiffusePongBuffer.BindImage(3); 
 			Deferred.DeferredRawBuffer.BindDepthImage(4);
-			Deferred.DeferredUnwrappedBuffer.BindImage(0, 5);
+			Water.WaterBuffer.BindDepthImage(5); 
+			Water.WaterBuffer.BindImage(6); 
 
-			glActiveTexture(GL_TEXTURE6); 
-			glBindTexture(GL_TEXTURE_CUBE_MAP, CubeMap.Lighting.Texture); 
-
-			glActiveTexture(GL_TEXTURE7);
-			glBindTexture(GL_TEXTURE_CUBE_MAP, CubeMap.RawDeferred.Texture[1]);
 
 			//CubeMap.RawDeferred;
 

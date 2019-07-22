@@ -2,6 +2,7 @@
 
 #include <LightCombiner.h>
 
+
 namespace Open7Days {
 	struct Pipeline {
 		Rendering::ChunkContainer Chunks; 

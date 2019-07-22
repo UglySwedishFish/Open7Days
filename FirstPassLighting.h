@@ -17,7 +17,7 @@ namespace Open7Days {
 
 			void Prepare(Window &Window);
 			void ReloadShader(); 
-			void RenderFirstLightingPass(Window& Window, Camera& Camera, DeferredRenderer &Deferred, ShadowMapper &Shadows, IndirectDiffuseLighting & Diffuse, CubeMapRenderer & CubeMap); 
+			void RenderFirstLightingPass(Window& Window, Camera& Camera, DeferredRenderer &Deferred, ShadowMapper &Shadows, IndirectDiffuseLighting & Diffuse, CubeMapRenderer & CubeMap, WaterRenderer & Water); 
 
 
 

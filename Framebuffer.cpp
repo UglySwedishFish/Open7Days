@@ -64,7 +64,7 @@ Open7Days::Rendering::FrameBufferObject::FrameBufferObject(glm::ivec2 Resolution
 
 	glTexImage2D(GL_TEXTURE_2D, 0, Format, Resolution.x, Resolution.y, 0, GetCorresponding(Format), Format == GL_RGBA32UI ? GL_UNSIGNED_INT : GL_FLOAT, NULL);
 
-	std::cout << glGetError() << '\n'; 
+	std::cout << "Frame buffer error: " << glGetError() << '\n'; 
 
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, generatemip ? GL_LINEAR_MIPMAP_LINEAR : GL_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);

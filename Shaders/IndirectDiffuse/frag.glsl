@@ -126,7 +126,7 @@ vec4 ConeTrace(vec3 Origin, vec3 Direction, vec3 Normal) {
 
 	
 
-	Result.xyz += texture(Sky,Direction).xyz * pow(Result.a,128.0) * 3.0; 
+	Result.xyz += pow(texture(Sky,Direction).xyz,vec3(2.2)) * pow(Result.a,128.0) * 3.0; 
 
 	return vec4(Result.xyz, 1.0); 
 
@@ -213,7 +213,7 @@ void main() {
 	if(distance(WorldPosition, CameraPosition) < (Size[2]/2.))
 		Diffuse = ConeTrace(WorldPosition,Direction, NormalRoughness.xyz).xyz;  
 	else
-		Diffuse = texture(Sky, Direction).xyz * 3.0; 
+		Diffuse = pow(texture(Sky, Direction).xyz,vec3(2.2)) * 3.0; 
 
 
 	float Depth = LinearlizeDepth(texture(Depth, TexCoord).x); 

@@ -13,10 +13,13 @@ uniform sampler2D Normal;
 uniform sampler2D BlueNoise; 
 uniform sampler2D IndirectDiffuse; 
 uniform sampler2D Depth; 
+uniform sampler2D WaterDepth; 
+uniform sampler2D WaterNormal; 
 uniform sampler2D ShadowMaps[3]; 
-uniform sampler2D Albedo; 
-uniform samplerCube Test; 
-uniform samplerCube CubeMapWorldPosition; 
+
+
+
+
 uniform float Time; 
 
 
@@ -27,6 +30,7 @@ uniform float Size[3];
 
 uniform mat4 ShadowCombined[3]; 
 uniform mat4 InverseView;
+uniform mat4 InverseProject;
 
 //vectors 
 
@@ -105,7 +109,7 @@ vec2 GetDirectionalShadows(vec3 WorldPosition, vec3 Normal, vec3 Incident, float
 	float ShadowMapSample = ShadowsESM((Index == 0 ? ShadowMaps[0] : Index == 1 ? ShadowMaps[1] : ShadowMaps[2]), ShadowNDC.xyz * 0.5 + 0.5) * 100.;
 
 	return vec2(ShadowMapSample * max(pow(dot(Normal,normalize(ShadowDirection)),3.),0.),
-					ShadowMapSample * pow(max(dot(reflect(Incident,Normal), ShadowDirection),0.0),100.0)); 
+					ShadowMapSample * pow(max(dot(reflect(Incident,Normal), ShadowDirection),0.0),32.0 + 500.0 * (1.0-Roughness))); 
 
 }
 
@@ -274,84 +278,6 @@ vec3 Volumetric(vec3 Direction, vec3 Origin, float DistanceToWorldPosition, floa
 
 }
 
-vec3 TraceCubeMap(samplerCube WorldPositionCubeMap, vec3 Direction, vec3 WorldPosition, vec3 CameraPosition, float Dither,
-					float StepSize, float Estimation, int BinarySearchSteps, int Steps, out bool success, out float traversaldistance, float IncreaseFactor) { 
-	success = false; 
-	
-	vec3 Hit = WorldPosition + Direction * Dither * StepSize; 
-
-	traversaldistance = Dither * StepSize; 
-
-	for(int Step = 1; Step < Steps; Step++) {
-	
-	Hit += Direction*StepSize; 
-
-	StepSize *= IncreaseFactor; 
-
-	traversaldistance += StepSize; 
-
-	vec3 PositionOnCubeMap = texture(WorldPositionCubeMap,normalize(Hit - CameraPosition), 0.f).xyz; 
-	
-	//are we close enough to estimate a hit? 
-	
-	if(distance(PositionOnCubeMap,Hit) < (StepSize * Estimation)) {
-	
-	float StepSizeBinarySearch = StepSize * 0.5;
-	
-	for(int StepBinarySearch=0;StepBinarySearch<BinarySearchSteps;StepBinarySearch++) {
-	
-	PositionOnCubeMap = textureLod(WorldPositionCubeMap,normalize(Hit - CameraPosition), 0.f).xyz; 
-
-	if(distance(PositionOnCubeMap,Hit) < (StepSize * Estimation)) {
-	traversaldistance -= StepSizeBinarySearch; 
-	Hit -= Direction*StepSizeBinarySearch;
-	}
-	else {
-	traversaldistance += StepSizeBinarySearch;  
-	Hit += Direction*StepSizeBinarySearch;
-	}
-
-	StepSizeBinarySearch*=0.5; 
-	}
-
-
-	success = true; 
-
-	return normalize(Hit - CameraPosition); 
-
-	}
-
-	if(Step == Steps-1) {
-	return vec3(Hit - CameraPosition); 
-	}
-	
-
-	}
-}
-
-vec3 GetSpecularRayDirection(vec3 RawDirection, vec3 Normal, vec3 Incident, float Roughness, float Seed) {
-
-	vec3 v0 = abs(Normal.z) < 0.999f ? vec3(0.f, 0.f, 1.f) : vec3(0.f, 1.f, 0.f);
-
-	vec3 Tangent = normalize(cross(v0, Normal));
-	vec3 Bitangent = normalize(cross(Tangent, Normal));
-
-
-	for(int Try = 0; Try < 3; Try++) {
-		
-		vec2 Xi = hash2(Seed) * vec2(1.f, 0.2f); 
-
-		vec3 rho = ImportanceGGX(Xi, clamp(sqrt(Roughness), 0.001f, 1.0f)); 
-
-		vec3 TryDirection = normalize(0.001f + rho.x * Tangent + rho.y * Bitangent + rho.z * RawDirection); 
-
-		if(dot(TryDirection, Normal) > 0.0005f) {
-			return TryDirection; 
-		}
-
-	}
-	return RawDirection; 
-}
 
 float GetWaves(vec2 Point, float Time, int Iterations) {
     
@@ -395,65 +321,13 @@ float ActualCaustics(vec2 P, float Time, int Iterations) {
 	return Caustics(P, Time * 0.912, Iterations) * Caustics(P, Time* 0.959, Iterations) * Caustics(P, -Time * 0.6237, Iterations) * Caustics(P, Time, Iterations);
 }
 
-
-vec3 VolumetricWater(vec3 Direction, vec3 Origin, float DistanceToWorldPosition, float DitherOffset) {
-
-	//grab dither offset 
+vec4 CalculateViewSpacePosition(float z) {
 
 
+    vec4 ClipSpace = vec4(TexCoord * 2.0 - 1.0, z * 2. - 1., 1.0);
+    vec4 ViewSpace = InverseProject * ClipSpace;
 
-
-	float StepSize = DistanceToWorldPosition / 116.0f;
-
-	float StepLength = DitherOffset * StepSize;
-
-	vec3 OriginActual = Origin + Direction * DitherOffset * StepSize;
-
-	vec3 Position = OriginActual;
-
-	vec3 Result = vec3(0.);
-
-	float Weight = 0.f;
-
-	float Dot = max(dot(Direction, ShadowDirection), 0.);
-
-	float StepLengthActualPrevious = 0.0;
-
-	while (StepLength < DistanceToWorldPosition) {
-
-		
-
-		StepLength += StepSize;
-
-		float StepLengthActual = StepLength / DistanceToWorldPosition;
-		//if(Fake) 
-		//StepLengthActual = StepLengthActual * StepLengthActual; 
-		StepLengthActual = StepLengthActual * DistanceToWorldPosition;
-
-
-
-
-		Position = OriginActual + Direction * StepLengthActual;
-
-		float StepSizeActual = StepLengthActual - StepLengthActualPrevious;
-
-
-		//grab shadow sample 
-		
-
-		float CurrentWeight = StepSizeActual;
-
-		Result += clamp(40.0 - Position.y, 0.0, 1.0) * vec3((ActualCaustics(Position.xz * 10.0, Time, 4) + vec3(0.0, 0.35, 0.5 )) * 25.0 * CurrentWeight);
-		Weight += CurrentWeight;
-
-		StepLengthActualPrevious = StepLengthActual;
-
-
-
-
-	}
-
-	return Result / Weight;
+	return ViewSpace / ViewSpace.w; 
 
 }
 
@@ -475,32 +349,33 @@ void main() {
 	
 	//START WITH DIRECT LIGHTING 
 
-	vec2 DirectionalShadows = GetDirectionalShadows(WorldPosition, NormalRoughness.xyz, Incident, 0.5,NoiseFactor.x); 
+	vec2 DirectionalShadows = GetDirectionalShadows(WorldPosition, NormalRoughness.xyz, Incident, NormalRoughness.a,NoiseFactor.x); 
 
 	Diffuse =  SunColor * DirectionalShadows.x; 
 
-	//if(WorldPosition.y < 40.0) {
 
-			
+	Diffuse += (clamp(40.0 - WorldPosition.y, 0.0, 5.0) * (ActualCaustics(WorldPosition.xz * 10.0, Time, 10) + vec3(0.0, 0.35, 0.5 )) * 5.0); 
 
-		Diffuse += (clamp(40.0 - WorldPosition.y, 0.0, 5.0) * (ActualCaustics(WorldPosition.xz * 10.0, Time, 10) + vec3(0.0, 0.35, 0.5 )) * 5.0); 
-	//	Diffuse += VolumetricWater(Incident, CameraPosition, distance(CameraPosition,WorldPosition), NoiseFactor.x); 
-	//}
 
 	
+	float DepthSample = texture(Depth, TexCoord).x; 
+	float LinearDepthSample = LinearlizeDepth(DepthSample); 
 
-	Diffuse += GetUpscaledIndirectDiffuse(NormalRoughness.xyz, LinearlizeDepth(texture(Depth, TexCoord).x));
+	Diffuse += GetUpscaledIndirectDiffuse(NormalRoughness.xyz, LinearDepthSample);
 	
 	Diffuse /= WorldPosition.y > 40.0 ? 1.0 : clamp(pow(max(abs(WorldPosition.y - 40.0)-.333,0.0),2.0) * 5,1.0,10000.);
 
-//	Color += Volumetric(Incident, CameraPosition, distance(WorldPosition, CameraPosition), NoiseFactor.x) * 25.0; 
 
-	bool Hit; 
+	float WaterDepthSample = texture(WaterDepth, TexCoord).x; 
 
-	float Traversal; 
+	if(WaterDepthSample > DepthSample)
+		Specular = SunColor * DirectionalShadows.y; 
+	else {
+		//do it for the water now! yay! 
 
-	//Color = mix(Color, max(texture(Test, TraceCubeMap(CubeMapWorldPosition, GetSpecularRayDirection(reflect(Incident, NormalRoughness.xyz),NormalRoughness.xyz,Incident,0.1,Seed), WorldPosition + NormalRoughness.xyz * 0.5, CameraPosition,0.0, 2.0, 0.5, 5, 12, Hit, Traversal, 1.25)).xyz,vec3(0.)),0.5); 
+		Specular = SunColor * GetDirectionalShadows(vec3(InverseView * CalculateViewSpacePosition(WaterDepthSample)), texture(WaterNormal, TexCoord).xyz, Incident, 0.0,NoiseFactor.x).y; 
 
-	Specular = SunColor * DirectionalShadows.y; 
+
+	}
 	
 }

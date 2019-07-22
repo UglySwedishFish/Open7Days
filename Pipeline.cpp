@@ -9,6 +9,7 @@ namespace Open7Days {
 
 
 		Rendering::PreparePostProcess(); 
+
 		Shadows.Prepare(Camera);
 		Deferred.PrepareDeferredRendering(Window, Camera); 
 		FirstPassLighting.Prepare(Window); 
@@ -23,6 +24,7 @@ namespace Open7Days {
 
 		Sky = Rendering::LoadHDRI("Textures/sky.hdr", true, true, EquirectangularToCubeMapShader);
 
+		
 
 		glClearColor(0.0,0.0,0.0, 1.0);
 		glEnable(GL_DEPTH_TEST);
@@ -94,7 +96,7 @@ namespace Open7Days {
 			Voxelizer.VoxelizeScene(Camera, Window, Shadows, Chunks);
 			CubeMap.RenderToCubeMap(Window, Camera, Deferred, Shadows, Chunks);
 			IndirectDiffuse.RenderIndirectDiffuseLighting(Window, Camera, Deferred, Shadows, Voxelizer, Sky);
-			FirstPassLighting.RenderFirstLightingPass(Window, Camera, Deferred, Shadows, IndirectDiffuse, CubeMap);
+			FirstPassLighting.RenderFirstLightingPass(Window, Camera, Deferred, Shadows, IndirectDiffuse, CubeMap, WaterRenderer);
 			IndirectSpecular.RenderIndirectSpecularLighting(Window, Camera, Deferred, CubeMap, FirstPassLighting, WaterRenderer, Sky);
 
 			glViewport(0, 0, Window.GetResolution().x, Window.GetResolution().y); 

@@ -49,7 +49,7 @@ namespace Open7Days {
 				Model = Core::ModelMatrix(Vector3f(-X * CHUNKSIZE, 0.0, -Y * CHUNKSIZE), Vector3f(0.)); 
 			}
 
-			void Generate(Materials::MaterialList * Materials); 
+			void Generate(Materials::MaterialList& Materials); 
 
 			void UpdateMesh(Materials::MaterialList* Materials);
 			

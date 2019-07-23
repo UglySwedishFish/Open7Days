@@ -4,9 +4,6 @@
 namespace Open7Days {
 	void Pipeline::Prepare(Window & Window, Camera & Camera) {
 
-		
-
-
 		Rendering::PreparePostProcess(); 
 
 		Shadows.Prepare(Camera);
@@ -22,8 +19,6 @@ namespace Open7Days {
 		EquirectangularToCubeMapShader = Rendering::Shader("Shaders/EquirectangularToCubeMapShader");
 
 		Sky = Rendering::LoadHDRI("Textures/sky.hdr", true, true, EquirectangularToCubeMapShader);
-
-		
 
 		glClearColor(0.0,0.0,0.0, 1.0);
 		glEnable(GL_DEPTH_TEST);

@@ -6,7 +6,7 @@ namespace Open7Days {
 		void Voxelizer::PrepareVoxelizer() {
 
 			for(int i=0;i<6;i++)
-			Texture[i] = VoxelTexture(VOXEL_VOLUME_RESOLUTION, 4);
+			Texture[i] = VoxelTexture(VOXEL_VOLUME_RESOLUTION, 1);
 
 			VoxelizingShader = Shader("Shaders/Voxelizer", true); 
 

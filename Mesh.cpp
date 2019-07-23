@@ -97,6 +97,10 @@ namespace Open7Days {
 				{
 					mesh.TexCoords.push_back(Vector3f(VertexTextureCoordinate->x, VertexTextureCoordinate->y, float(aiMesh->mMaterialIndex) + 0.1));
 				}
+				else
+				{
+					mesh.TexCoords.push_back(Vector3f(aiVector3D(0).x, aiVector3D(0).y, float(aiMesh->mMaterialIndex) + 0.1f));
+				}
 				mesh.Materials.push_back(aiMesh->mMaterialIndex);
 			}
 

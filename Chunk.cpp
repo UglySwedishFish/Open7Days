@@ -123,7 +123,7 @@ namespace Open7Days {
 		}
 
 
-		void Chunk::Generate(Materials::MaterialList* Materials)
+		void Chunk::Generate(Materials::MaterialList& Materials)
 		{
 
 
@@ -165,10 +165,10 @@ namespace Open7Days {
 
 					
 
-					BlockTypes[x][z] = HeightGrid[x][z] > 60.0f ? Materials->Materials["snow"].SubTexture : (HeightGrid[x][z] < 45.0 ? Materials->Materials["sand"].SubTexture : Materials->Materials["dirt"].SubTexture);
+					BlockTypes[x][z] = HeightGrid[x][z] > 60.0f ? Materials.Materials["snow"].SubTexture : (HeightGrid[x][z] < 45.0 ? Materials.Materials["sand"].SubTexture : Materials.Materials["dirt"].SubTexture);
 
 					if (Roads > 0.99)
-						BlockTypes[x][z] = Materials->Materials["asphalt"].SubTexture; 
+						BlockTypes[x][z] = Materials.Materials["asphalt"].SubTexture; 
 
 					
 
@@ -625,7 +625,7 @@ namespace Open7Days {
 
 						auto Update = [&]() {
 
-							ChunkContainer[Location.X][Location.Y]->Generate(Materials);
+							ChunkContainer[Location.X][Location.Y]->Generate(*Materials);
 							ChunkContainer[Location.X][Location.Y]->UpdateMesh(Materials);
 
 						}; 

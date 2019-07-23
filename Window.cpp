@@ -153,7 +153,6 @@ Window::Window(Vector2i Resolution, bool Fullscreen) {
 	settings.antialiasingLevel = 0;
 	settings.majorVersion = 4;
 	settings.minorVersion = 3;
-	settings.attributeFlags = sf::ContextSettings::Core;
 #ifndef NDEBUG
 	settings.attributeFlags |= sf::ContextSettings::Debug;
 #endif//NDEBUG

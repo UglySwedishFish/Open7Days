@@ -21,7 +21,6 @@ namespace Open7Days {
 
 			inline VoxelTexture(unsigned int resolution, unsigned int maxMipMap = 1) {
 				Resolution = resolution;
-				Data = std::vector<GLfloat>(4 * Resolution * Resolution * Resolution, 0.0); //the 4* is to make sure every pixel has 4 values (RGBA) 
 
 				glGenTextures(1, &ID);
 				glBindTexture(GL_TEXTURE_3D, ID);
@@ -35,11 +34,11 @@ namespace Open7Days {
 
 				const int levels = maxMipMap;
 				glTexStorage3D(GL_TEXTURE_3D, levels, GL_RGBA8, Resolution, Resolution, Resolution);
-				glTexImage3D(GL_TEXTURE_3D, 0, GL_RGBA8, Resolution, Resolution, Resolution, 0, GL_RGBA, GL_FLOAT, &Data[0]);
+				glTexImage3D(GL_TEXTURE_3D, 0, GL_RGBA8, Resolution, Resolution, Resolution, 0, GL_RGBA, GL_FLOAT, 0);
 				glBindTexture(GL_TEXTURE_3D, 0);
 			}
 
-			inline void Clear(Vector4u ClearColor) {
+			inline void Clear(Vector4u) {
 // 				unsigned char CCF[] = { ClearColor.r,ClearColor.g,ClearColor.b,ClearColor.a };
 				glBindTexture(GL_TEXTURE_3D, ID);
 				glClearTexImage(ID, 0, GL_RGBA, GL_FLOAT, 0);

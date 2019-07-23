@@ -1,17 +1,18 @@
 #pragma once
 
-#include <Core.h>
-#include <Framebuffer.h>
+#include "Core.h"
+#include "Framebuffer.h"
 #include <stdint.h>
 #include <array>
 #include <tuple>
 #include <vector>
 #include <unordered_map>
 #include <queue>
-#include <Camera.h>
-#include <Shader.h>
-#include <Materials.h>
+#include "Camera.h"
+#include "Shader.h"
+#include "Materials.h"
 #include <memory>
+#include <list>
 
 #define CHUNKSIZE 16
 #define CHUNKHEIGHT 256
@@ -48,7 +49,7 @@ namespace Open7Days {
 				Model = Core::ModelMatrix(Vector3f(-X * CHUNKSIZE, 0.0, -Y * CHUNKSIZE), Vector3f(0.)); 
 			}
 
-			void Generate(Materials::MaterialList * Materials); 
+			void Generate(Materials::MaterialList& Materials); 
 
 			void UpdateMesh(Materials::MaterialList* Materials);
 			
@@ -63,7 +64,7 @@ namespace Open7Days {
 		struct ChunkContainer {
 
 			std::vector<Chunk*> DrawChunks; //for faster iteration
-			std::map<std::int64_t, std::map<std::int64_t, Chunk*>> ChunkContainer;
+			std::map<std::int64_t, std::map<std::int64_t, Chunk>> ChunkContainer;
 			
 
 			struct ChunkLocation {

@@ -1,11 +1,11 @@
 #pragma once
 
-#include <Framebuffer.h>
-#include <Shader.h>
-#include <Camera.h>
-#include <Chunk.h>
+#include "Framebuffer.h"
+#include "Shader.h"
+#include "Camera.h"
+#include "Chunk.h"
 #include <array>
-#include <Texture.h>
+#include "Texture.h"
 
 //TODO: maybe at some point add settings for this. 
 #define SHADOW_MAP_RES 1024

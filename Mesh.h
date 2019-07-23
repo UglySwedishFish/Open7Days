@@ -1,6 +1,6 @@
 #pragma once
 
-#include <Shader.h>
+#include "Shader.h"
 #include <assimp/cimport.h>
 #include <assimp/mesh.h>
 #include <assimp/Importer.hpp>

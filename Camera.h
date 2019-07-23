@@ -1,8 +1,8 @@
 #pragma once
 
-#include <Core.h> 
-#include <Window.h>
-#include <Frustum.h>
+#include "Core.h" 
+#include "Window.h"
+#include "Frustum.h"
 
 namespace Open7Days {
 	struct Camera {

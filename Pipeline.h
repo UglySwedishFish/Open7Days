@@ -1,6 +1,6 @@
 #pragma once
 
-#include <LightCombiner.h>
+#include "LightCombiner.h"
 
 
 namespace Open7Days {

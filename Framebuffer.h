@@ -1,8 +1,8 @@
 #pragma once
 #pragma once
-#include <Dependencies\DependenciesRendering.h> 
-#include <Dependencies\DependenciesMath.h> 
-#include <Window.h> 
+#include "Dependencies/DependenciesRendering.h"
+#include "Dependencies/DependenciesMath.h"
+#include "Window.h"
 
 namespace Open7Days {
 	namespace Rendering {

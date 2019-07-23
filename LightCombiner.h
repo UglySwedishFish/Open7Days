@@ -1,6 +1,6 @@
 #pragma once
 
-#include <IndirectSpecular.h>
+#include "IndirectSpecular.h"
 
 namespace Open7Days {
 	namespace Rendering {

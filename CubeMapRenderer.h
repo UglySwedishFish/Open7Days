@@ -1,8 +1,8 @@
 #pragma once
 
-#include <Shadows.h>
-#include <DeferredRenderer.h>
-#include <Texture.h>
+#include "Shadows.h"
+#include "DeferredRenderer.h"
+#include "Texture.h"
 
 namespace Open7Days {
 

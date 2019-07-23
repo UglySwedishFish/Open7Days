@@ -29,8 +29,8 @@ namespace Open7Days {
 		};
 
 		struct Material {
-			Type Type; 
-			IconType IconType; 
+			Type type; 
+			IconType iconType; 
 			unsigned short MaxHealth; 
 			float Hardness; 
 			bool HasMet; 

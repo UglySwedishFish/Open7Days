@@ -1,8 +1,8 @@
 #pragma once
 
-#include <Dependencies/DependenciesMath.h>
+#include "Dependencies/DependenciesMath.h"
 #include <string>
-#include <Shader.h>
+#include "Shader.h"
 
 const Matrix4f CubeProjection = glm::perspective(glm::radians(90.0f), 1.0f, 0.1f, 1000.0f);
 const Matrix4f CubeViews[] =

@@ -561,30 +561,32 @@ namespace Open7Days {
 
 			for (auto& X : ChunkContainer) {
 				int64_t x = X.first;
-				for (auto& Y : X.second) {
-
-					
-					int64_t y = Y.first; 
-
-					//todo: camera should be split into two elements
-
+				auto iter = X.second.begin();
+				while(iter != X.second.end())
+				{
+					int64_t y = iter->first;
 					double Distance = glm::distance(Vector2f(Camera.Position.x, Camera.Position.z), Vector2f(x * CHUNKSIZE, y * CHUNKSIZE)); 
-
-					if (Distance / CHUNKSIZE > RENDER_DISTANCE) {
-						delete ChunkContainer[x][y]; 
-						ChunkContainer[x].erase(y); 
-						UpdateDrawChunks = true; 
-
-
-					}
-
-
-
-				}
-
-				if (ChunkContainer[x].size() == 0)
-					ChunkContainer.erase(x); 
 					
+					if (Distance / CHUNKSIZE > RENDER_DISTANCE) {
+						X.second.erase(iter++);
+						UpdateDrawChunks = true;
+					}
+					else
+					{
+						++iter;
+					}
+				}
+			}
+			for(auto iter = ChunkContainer.begin(); iter != ChunkContainer.end();)
+			{
+				if(iter->second.size() == 0)
+				{
+					ChunkContainer.erase(iter++);
+				}
+				else
+				{
+					++iter;
+				}
 			}
 
 			//step two, add ungenerated chunks to the queue 
@@ -604,7 +606,7 @@ namespace Open7Days {
 
 					if (glm::distance(Vector2f(Camera.Position.x, Camera.Position.z),Vector2f(ActualX * CHUNKSIZE, ActualY * CHUNKSIZE)) < RENDER_DISTANCE*CHUNKSIZE) {
 						ChunksToBeGenerated.push_back(ChunkLocation(ActualX, ActualY));
-						ChunkContainer[ActualX][ActualY] = new Chunk(ActualX, ActualY);
+						ChunkContainer[ActualX][ActualY] = Chunk(ActualX, ActualY);
 
 					}
 
@@ -621,16 +623,8 @@ namespace Open7Days {
 
 				if (ChunkContainer.find(Location.X) != ChunkContainer.end()) {
 					if (ChunkContainer[Location.X].find(Location.Y) != ChunkContainer[Location.X].end()) {
-
-
-						auto Update = [&]() {
-
-							ChunkContainer[Location.X][Location.Y]->Generate(*Materials);
-							ChunkContainer[Location.X][Location.Y]->UpdateMesh(Materials);
-
-						}; 
-
-						Update(); 
+						ChunkContainer[Location.X][Location.Y].Generate(*Materials);
+						ChunkContainer[Location.X][Location.Y].UpdateMesh(Materials); 
 
 						UpdateDrawChunks = true;
 					}
@@ -647,7 +641,7 @@ namespace Open7Days {
 				DrawChunks.clear();
 				for (auto& X : ChunkContainer) {
 					for (auto& Y : X.second) {
-						DrawChunks.push_back(Y.second);
+						DrawChunks.push_back(&Y.second);
 					}
 				}
 			}

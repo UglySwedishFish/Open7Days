@@ -13,8 +13,7 @@ T Open7Days::Core::Interpolate(T A, T B, T X) {
 
 
 Matrix4f Open7Days::Core::ViewMatrix(Vector3f Position, Vector3f Rotation) {
-	Matrix4f Temp;
-	Temp = glm::rotate(Temp, glm::radians(Rotation.x), { 1, 0, 0 });
+	Matrix4f Temp = glm::rotate(Matrix4f(1.0f), glm::radians(Rotation.x), { 1, 0, 0 });
 	Temp = glm::rotate(Temp, glm::radians(Rotation.y), { 0, 1, 0 });
 	Temp = glm::rotate(Temp, glm::radians(Rotation.z), { 0, 0, 1 });
 
@@ -24,9 +23,7 @@ Matrix4f Open7Days::Core::ViewMatrix(Vector3f Position, Vector3f Rotation) {
 }
 
 Matrix4f Open7Days::Core::ModelMatrix(Vector3f Position, Vector3f Rotation) {
-	Matrix4f Temp;
-
-	Temp = glm::translate(Temp, Vector3f(-Position.x, -Position.y, -Position.z));
+	Matrix4f Temp = glm::translate(Matrix4f(1.0f), Vector3f(-Position.x, -Position.y, -Position.z));
 	Temp = glm::rotate(Temp, glm::radians(Rotation.x), { 1, 0, 0 });
 	Temp = glm::rotate(Temp, glm::radians(Rotation.y), { 0, 1, 0 });
 	Temp = glm::rotate(Temp, glm::radians(Rotation.z), { 0, 0, 1 });

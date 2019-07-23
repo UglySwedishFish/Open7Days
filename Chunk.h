@@ -64,7 +64,7 @@ namespace Open7Days {
 		struct ChunkContainer {
 
 			std::vector<Chunk*> DrawChunks; //for faster iteration
-			std::map<std::int64_t, std::map<std::int64_t, Chunk*>> ChunkContainer;
+			std::map<std::int64_t, std::map<std::int64_t, Chunk>> ChunkContainer;
 			
 
 			struct ChunkLocation {

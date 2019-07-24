@@ -6,14 +6,14 @@ namespace Open7Days {
 		unsigned int LoadShader(unsigned int ShaderType, const std::string & File, unsigned int &Buffer, unsigned int BaseID, bool ReCreate = true);
 
 		struct Shader {
-			unsigned int VertexShader = 10000;
-			unsigned int FragmentShader = 10000;
-			unsigned int GeometryShader = 10000;
+			unsigned int VertexShader = 0;
+			unsigned int FragmentShader = 0;
+			unsigned int GeometryShader = 0;
 
-			unsigned int VertexBuffer = 10000, FragmentBuffer = 10000, GeometryBuffer = 10000;
-			unsigned int VertexID = 10000, FragmentID = 10000, GeometryID = 10000;
+			unsigned int VertexBuffer = 0, FragmentBuffer = 0, GeometryBuffer = 0;
+			unsigned int VertexID = 0, FragmentID = 0, GeometryID = 0;
 
-			unsigned int ShaderID = 10000;
+			unsigned int ShaderID = 0;
 
 			Shader(const std::string & vertex, const std::string & fragment);
 			Shader(const std::string & vertex, const std::string & geometry, const std::string & fragment);

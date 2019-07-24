@@ -20,6 +20,7 @@ namespace Open7Days {
 			LightCombinerShader.SetUniform("Depth", 6);
 			LightCombinerShader.SetUniform("WaterDepth", 7);
 			LightCombinerShader.SetUniform("WaterNormal", 8);
+			LightCombinerShader.SetUniform("WaterNormalMap", 9);
 
 			LightCombinerShader.UnBind();
 
@@ -35,6 +36,7 @@ namespace Open7Days {
 			LightCombinerShader.SetUniform("InverseView", glm::inverse(Camera.View));
 			LightCombinerShader.SetUniform("InverseProject", glm::inverse(Camera.Project));
 			LightCombinerShader.SetUniform("CameraPosition", Camera.Position);
+			LightCombinerShader.SetUniform("Time", Window.GetTimeOpened());
 
 			
 			First.FirstPassLightingBuffer.BindImage(0, 0); 
@@ -46,6 +48,8 @@ namespace Open7Days {
 			Deferred.DeferredRawBuffer.BindDepthImage(6); 
 			Water.WaterBuffer.BindDepthImage(7); 
 			Water.WaterBuffer.BindImage(8); 
+			glActiveTexture(GL_TEXTURE9);
+			glBindTexture(GL_TEXTURE_2D_ARRAY, Water.WaterNormalTexture);
 
 			DrawPostProcessQuad(); 
 
@@ -67,6 +71,7 @@ namespace Open7Days {
 			LightCombinerShader.SetUniform("Depth", 6);
 			LightCombinerShader.SetUniform("WaterDepth", 7);
 			LightCombinerShader.SetUniform("WaterNormal", 8);
+			LightCombinerShader.SetUniform("WaterNormalMap", 9);
 
 			LightCombinerShader.UnBind();
 		}

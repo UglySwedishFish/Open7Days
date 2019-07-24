@@ -5,7 +5,6 @@
 #include "Dependencies/DependenciesMath.h"
 #include "Dependencies/DependenciesRendering.h"
 
-//if youre using an actually good IDE/compiler/are from the future, feel free to change this line to using std::filesystem
 using namespace std::filesystem;
 
 

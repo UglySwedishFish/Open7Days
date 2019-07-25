@@ -13,7 +13,7 @@ this is quite a far away plan but hopefully this will start being developed with
 
 # How can I support the development of Open7Days? 
 
-Right now, because the engine is in such an early stage, I advice you against actively working on it. Of course, if you see anything you 
+Right now, because the engine is in such an early stage, I advise you against actively working on it. Of course, if you see anything you 
 see could be improved, feel free to open an issue / submit a request. 
 
 # Current features implemented in Open7Days. 
@@ -28,7 +28,9 @@ see could be improved, feel free to open an issue / submit a request.
 
 * **Screen-space-refractions**
 
-* **Basic water rendering**
+* **Water rendering**
+
+* **Basic sky rendering**
 
 # Current up-to-date screenshot: 
 

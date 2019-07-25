@@ -13,7 +13,7 @@ namespace Open7Days {
 			bool First = true; 
 
 			void PrepareIndirectSpecularLighting(Window& Window); 
-			void RenderIndirectSpecularLighting(Window& Window, Camera& Camera, DeferredRenderer& Deferred, CubeMapRenderer& CubeMap, FirstPassLighting& FirstPassLighting,WaterRenderer & Water, TextureCubeMap& Sky);
+			void RenderIndirectSpecularLighting(Window& Window, Camera& Camera, DeferredRenderer& Deferred, CubeMapRenderer& CubeMap, FirstPassLighting& FirstPassLighting,WaterRenderer & Water,ShadowMapper & Shadows, TextureCubeMap& Sky);
 			void ReloadIndirectSpecular(); 
 
 		};

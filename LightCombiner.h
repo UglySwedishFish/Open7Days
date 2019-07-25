@@ -11,7 +11,7 @@ namespace Open7Days {
 			Shader LightCombinerShader; 
 
 			void PrepareLightCombiner(); 
-			void CombineLighting(Window & Window, Camera & Camera, DeferredRenderer & Deferred, FirstPassLighting & First, IndirectSpecularLighting & IndirectSpecular, WaterRenderer & Water, TextureCubeMap & Sky); 
+			void CombineLighting(Window & Window, Camera & Camera, DeferredRenderer & Deferred, FirstPassLighting & First, IndirectSpecularLighting & IndirectSpecular, WaterRenderer & Water,ShadowMapper &Shadows, TextureCubeMap & Sky); 
 			void ReloadLightCombiner(); 
 		};
 

@@ -27,7 +27,7 @@ namespace Open7Days {
 
 		}
 
-		void LightCombiner::CombineLighting(Window& Window, Camera& Camera, DeferredRenderer& Deferred, FirstPassLighting& First, IndirectSpecularLighting& IndirectSpecular, WaterRenderer & Water,TextureCubeMap& Sky) {
+		void LightCombiner::CombineLighting(Window& Window, Camera& Camera, DeferredRenderer& Deferred, FirstPassLighting& First, IndirectSpecularLighting& IndirectSpecular, WaterRenderer & Water, ShadowMapper& Shadows,TextureCubeMap& Sky) {
 
 			LightCombinerShader.Bind(); 
 
@@ -37,6 +37,7 @@ namespace Open7Days {
 			LightCombinerShader.SetUniform("InverseProject", glm::inverse(Camera.Project));
 			LightCombinerShader.SetUniform("CameraPosition", Camera.Position);
 			LightCombinerShader.SetUniform("Time", Window.GetTimeOpened());
+			LightCombinerShader.SetUniform("LightDirection", glm::normalize(Shadows.Orientation));
 
 			
 			First.FirstPassLightingBuffer.BindImage(0, 0); 
@@ -44,7 +45,8 @@ namespace Open7Days {
 			IndirectSpecular.IndirectSpecularBuffer.BindImage(2); 
 			Deferred.DeferredUnwrappedBuffer.BindImage(1, 3); 
 			Deferred.DeferredUnwrappedBuffer.BindImage(0, 4);
-			Sky.Bind(5); 
+			glActiveTexture(GL_TEXTURE5);
+			glBindTexture(GL_TEXTURE_2D_ARRAY, Water.SkyTexture);
 			Deferred.DeferredRawBuffer.BindDepthImage(6); 
 			Water.WaterBuffer.BindDepthImage(7); 
 			Water.WaterBuffer.BindImage(8); 

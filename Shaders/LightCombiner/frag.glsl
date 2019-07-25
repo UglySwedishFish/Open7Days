@@ -13,8 +13,9 @@ uniform sampler2D Depth;
 uniform sampler2D WaterDepth; 
 uniform sampler2D WaterNormal;
 uniform sampler2DArray WaterNormalMap; 
+uniform sampler2DArray Sky; 
 uniform float Time; 
-uniform samplerCube Sky; 
+uniform vec3 LightDirection; 
 
 uniform mat4 ViewMatrix; 
 uniform mat4 ProjectionMatrix; 
@@ -31,6 +32,8 @@ float E = 0.02;
 float F = 0.30;
 float W = 11.2;
 
+
+
 vec3 Uncharted2Tonemap(vec3 x)
 {
    return ((x*(A*x+C*B)+D*E)/(x*(A*x+B)+D*F))-E/F;
@@ -41,6 +44,7 @@ vec3 Fresnel(vec3 Incident, vec3 Normal, vec3 Specular, float Roughness) {
 }
 
 float FresnelWater(vec3 Incident, vec3 Normal) {
+
 	return 0.04 + 0.96 * pow(max(1.0 - abs(dot(Incident,Normal)),0.0), 5.0);
 }
 
@@ -62,6 +66,17 @@ float LinearlizeDepth(float z) {
 	return 2.0 * zNear * zFar / (zFar + zNear - (z*2.-1.) * (zFar - zNear)); 
 
 }
+
+const vec2 invAtan = vec2(0.1591, 0.3183);
+vec2 SampleSphericalMap(vec3 v)
+{
+    vec2 uv = vec2(atan(v.z, v.x), asin(v.y));
+    uv *= invAtan;
+    uv += 0.5;
+    return uv;
+}
+
+
 
 
 vec2 ScreenSpaceTracing(vec3 ViewPos, vec3 Normal) {
@@ -144,7 +159,35 @@ vec4 SampleInterpolatied(sampler2DArray Sampler,vec3 Coord) {
 
 }
 
+const float LN2 = 0.693147181; 
 
+vec3 AnalyticalWaterDarkness(float Traversal, vec3 Incident) {
+	
+	float X = Traversal; 
+
+	vec3 A = vec3(1.0,0.65,0.5); 
+	vec3 B = vec3(1.0,0.5,0.65); 
+
+	if(X<=1) {
+		return 0.4 * ((B-2*A)/(X+1.)+(B-A)*log(X+1)); 
+	}
+	else {
+		return 0.4 * ((B*(X*X+X*LN2+LN2))/((X)+1.) - A*(1 + LN2)); 
+	}
+
+}
+
+#define PI 3.14159265359
+vec3 decode (vec2 enc)
+{
+    vec2 fenc = enc*4-2;
+    float f = dot(fenc,fenc);
+    float g = sqrt(1-f/4);
+    vec3 n;
+    n.xy = fenc*g;
+    n.z = 1-f/2;
+    return normalize(n);
+}
 void main() {
 	
 	vec4 AlbedoSample = texture(Albedo, TexCoord); 
@@ -172,8 +215,26 @@ void main() {
 	vec3 WaterWorldPosition = vec3(InverseView * vec4(WaterViewPosition,1.0)); 
 
 	RawNormalSample.xyz = WaterDepth > DepthSample ? RawNormalSample.xyz : texture(WaterNormal, TexCoord).xyz; 
+	
+	vec2 Coord = SampleSphericalMap(-Incident); 
+	Coord.y = Coord.y * 2. - 1.; 
 
-	vec3 BackGround = mix(vec3(0.3), pow(texture(Sky, -Incident).xyz,vec3(3.0)) * 3.,  max(-Incident.y-0.1,0.0)); 
+	vec4 SkyTextureSample = SampleInterpolatied(Sky, vec3(1.0 - Coord,mod(Time*10.0, 119.))); ; 
+	
+	if(abs(Coord.x*2.-1.) > 0.998) {
+		
+		SkyTextureSample = mix(SampleInterpolatied(Sky, vec3(0.999,1.0-Coord.y,mod(Time*10.0, 119.))),SampleInterpolatied(Sky, vec3(0.001,1.0-Coord.y,mod(Time*10.0, 119.))),0.5); 
+
+
+	}
+		
+
+	
+	vec4 SkySample = Coord.y < 0.01 ? vec4(0.0) :SkyTextureSample; 
+
+
+
+	vec3 BackGround = mix(vec3(0.0,0.3,0.6), (2.0 * max(dot(LightDirection,SkySample.xyz),0.) + vec3(0.0,0.3,0.6)*1.25),SkySample.w); 
 
 	vec3 RelativeCameraPosition = CameraPosition - Incident * 0.15;
 
@@ -222,7 +283,7 @@ void main() {
 			vec3 RefractedLighting = RefractedLightingRaw; 
 			vec3 HitWorldPosition = vec3(InverseView * vec4(CalculateViewSpacePosition(texture(Depth, RefractedLightingCoord).x).xyz,1.0)); 
 			if(!FragmentUnderWater) 
-			RefractedLighting /= clamp(pow(max(abs(HitWorldPosition.y - WaterWorldPosition.y)-.333,0.0),2.0) * 5,1.0,10000.); 
+				RefractedLighting /= clamp(pow(max(abs(HitWorldPosition.y - WaterWorldPosition.y)-.333,0.0),2.0) * 5,1.0,10000.); 
 
 
 
@@ -244,8 +305,13 @@ void main() {
 
 		vec3 LightingRaw = Lighting; 
 
-		Lighting *= mix(vec3(0.0, 0.35, 0.5 ),vec3(0.0,0.5,0.35),clamp(WorldDistance,0.0,2.0)*0.5) * 2.0; 
-		Lighting /= clamp(pow(max(WorldDistance-.333,0.0),2.0) * 5,1.0,10000.); 
+		//use an analytical solution of an integral describing the water darkness at a point 
+
+		float T = WorldDistance; 
+
+		vec3 WaterDarkness = 1.0- clamp((AnalyticalWaterDarkness(WorldDistance*2.0, -Incident)),vec3(0.0),vec3(1.)); 
+
+		Lighting *= WaterDarkness; 
 
 		}
 

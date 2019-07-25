@@ -11,7 +11,7 @@ uniform samplerCube Test;
 uniform samplerCube CubeMapWorldPosition; 
 uniform sampler2D Albedo; 
 uniform sampler2D Previous; 
-uniform samplerCube Sky; 
+uniform sampler2DArray Sky; 
 uniform sampler2D Depth; 
 uniform sampler2D WaterDepth; 
 uniform sampler2D WaterNormal; 
@@ -21,8 +21,10 @@ uniform mat4 View;
 uniform mat4 Project; 
 uniform mat4 InverseProject; 
 uniform mat4 PreviousCombined; 
+uniform float Time; 
 
 uniform vec3 CameraPosition; 
+uniform vec3 LightDirection; 
 
 uniform int Frame; 
 uniform bool First;
@@ -196,6 +198,27 @@ vec4 CalculateViewSpacePosition(float z) {
 
 }
 
+const vec2 invAtan = vec2(0.1591, 0.3183);
+vec2 SampleSphericalMap(vec3 v)
+{
+    vec2 uv = vec2(atan(v.z, v.x), asin(v.y));
+    uv *= invAtan;
+    uv += 0.5;
+    return uv;
+}
+
+vec4 SampleInterpolatied(sampler2DArray Sampler,vec3 Coord) {
+
+	float BaseTime = mod(Coord.z, 119.); 
+
+	int Coord1 = int(floor(BaseTime)); 
+	int Coord2 = int(ceil(BaseTime))%119; 
+
+	return mix(texture(Sampler, vec3(Coord.xy, Coord1)), texture(Sampler,vec3(Coord.xy, Coord2)), fract(BaseTime)); 
+
+
+}
+
 
 void main() {
 
@@ -240,6 +263,7 @@ void main() {
 
 	//IndirectSpecular = vec3(Roughness); 
 
+
 	if(abs(ScreenSpaceHit.x) < 1.0 && abs(ScreenSpaceHit.y) < 1.0) {
 		ScreenSpaceHit = ScreenSpaceHit * 0.5 + 0.5; 
 
@@ -255,8 +279,22 @@ void main() {
 
 		vec4 SpecularSample = texture(Test, TraceCubeMap(CubeMapWorldPosition,Direction , WorldPosition + NormalRoughness.xyz * 0.5, CameraPosition,0.0, mix(2.0,4.0,Roughness), mix(0.5,1.0,Roughness), int(mix(4,2,Roughness)), int(mix(12,6,Roughness)), Hit, Traversal, 1.25)); 
 	
+	
+
+		vec2 Coord = SampleSphericalMap(Direction); 
+		Coord.y = Coord.y * 2. - 1.; 
+	
+
+
+		vec4 SkySample = Coord.y < 0.0 ? vec4(0.0) : SampleInterpolatied(Sky, vec3(1.0 - Coord,mod(Time*10.0, 119.))); 
+
+
+
+		vec3 BackGround = mix(vec3(0.0,0.3,0.6), (2.0 * max(dot(LightDirection,SkySample.xyz),0.) + vec3(0.0,0.3,0.6)*1.25),SkySample.w); 
+
+
 		SpecularSample.xyz = max(SpecularSample.xyz, vec3(0.)); 
-		SpecularSample.xyz += SpecularSample.aaa * pow(texture(Sky, Direction).xyz,vec3(2.2)); 
+		SpecularSample.xyz += SpecularSample.aaa * BackGround; 
 
 		IndirectSpecular.xyz  = SpecularSample.xyz; 
 

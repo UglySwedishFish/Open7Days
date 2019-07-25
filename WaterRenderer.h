@@ -8,7 +8,7 @@
 namespace Open7Days {
 	namespace Rendering {
 		struct WaterRenderer {
-			unsigned int WaterNormalTexture; 
+			unsigned int WaterNormalTexture, SkyTexture; 
 			Shader WaterDeferred; 
 			FrameBufferObject WaterBuffer; 
 			Model WaterMesh; 

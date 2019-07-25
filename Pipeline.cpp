@@ -8,6 +8,8 @@ namespace Open7Days {
 
 		Shadows.Prepare(Camera);
 		Deferred.PrepareDeferredRendering(Window, Camera); 
+ 
+
 		FirstPassLighting.Prepare(Window); 
 		Voxelizer.PrepareVoxelizer(); 
 		IndirectDiffuse.PrepareIndirectDiffuseLighting(Window); 
@@ -90,13 +92,13 @@ namespace Open7Days {
 			CubeMap.RenderToCubeMap(Window, Camera, Deferred, Shadows, Chunks);
 			IndirectDiffuse.RenderIndirectDiffuseLighting(Window, Camera, Deferred, Shadows, Voxelizer, Sky);
 			FirstPassLighting.RenderFirstLightingPass(Window, Camera, Deferred, Shadows, IndirectDiffuse, CubeMap, WaterRenderer);
-			IndirectSpecular.RenderIndirectSpecularLighting(Window, Camera, Deferred, CubeMap, FirstPassLighting, WaterRenderer, Sky);
+			IndirectSpecular.RenderIndirectSpecularLighting(Window, Camera, Deferred, CubeMap, FirstPassLighting, WaterRenderer,Shadows, Sky);
 
 			glViewport(0, 0, Window.GetResolution().x, Window.GetResolution().y); 
 
 			glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT); 
 			
-			LightCombiner.CombineLighting(Window, Camera, Deferred, FirstPassLighting, IndirectSpecular, WaterRenderer, Sky); 
+			LightCombiner.CombineLighting(Window, Camera, Deferred, FirstPassLighting, IndirectSpecular, WaterRenderer,Shadows, Sky); 
 			
 			Window.GetRawWindow()->display(); 
 
